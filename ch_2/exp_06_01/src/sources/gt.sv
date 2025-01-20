@@ -6,6 +6,7 @@ module gt_sop
 
     logic p0, p1, p2, p3, p4, p5;
 
+    // test
     // summation
     assign agtb = p0 | p1 | p2 | p3 | p4 | p5;
 
