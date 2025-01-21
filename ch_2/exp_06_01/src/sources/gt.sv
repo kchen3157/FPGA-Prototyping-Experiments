@@ -1,4 +1,4 @@
-module gt_sop
+module gt_2_sop
     (
         input logic [1:0] a, b,
         output logic agtb

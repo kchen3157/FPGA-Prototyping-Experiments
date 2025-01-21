@@ -1,13 +1,13 @@
 timescale 1 ns/10 ps
 
 
-module  gt_sop_testbench;
+module  gt_2_sop_testbench;
 
     logic [1:0] test_a_in, test_b_in;
     logic test_agtb_out;
 
     // uut instantiation
-    gt uut
+    gt_2_sop uut
         (.a(test_a_in), .b(test_b_in), .agtb(test_agtb_out));
     
     initial
