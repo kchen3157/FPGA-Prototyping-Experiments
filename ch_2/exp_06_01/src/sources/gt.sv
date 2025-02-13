@@ -36,6 +36,6 @@ module gt_4_sop
     gt_2_sop gt_2_sop_inst_high
         (.a(a[2:3]), .b(b[2:3]), .agtb(agtb_high));
 
-    assign agtb = agtb_high | (agtb_low & ~agtb_high)
+    assign agtb = agtb_high | (agtb_low & ~agtb_high);
 
 endmodule
