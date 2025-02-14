@@ -5,7 +5,7 @@ module eq_2_sop
     );
 
     // summation
-    assign agtb = p0 | p1 | p2 | p3;
+    assign aeqb = p0 | p1 | p2 | p3;
 
     // product terms
     assign p0 = (~b[1] & ~b[0]) & (~a[1] & ~a[0]); // 00 == 00
