@@ -25,7 +25,7 @@ endmodule
 module gt_4_sop
     (
         input logic [3:0] a, b,
-        output logic agtb
+        output logic agtb, p_agtb_high, p_agtb_low
     );
 
     logic agtb_low, agtb_high;
@@ -37,5 +37,9 @@ module gt_4_sop
         (.a(a[3:2]), .b(b[3:2]), .agtb(agtb_high));
 
     assign agtb = agtb_high | (agtb_low & ~agtb_high);
+
+    // debug logic
+    assign p_agtb_high = agtb_high;
+    assign p_agtb_low = agtb_low;
 
 endmodule

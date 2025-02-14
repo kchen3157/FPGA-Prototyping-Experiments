@@ -4,11 +4,11 @@
 module  gt_4_sop_testbench;
 
     logic [3:0] test_a_in, test_b_in;
-    logic test_agtb_out;
+    logic test_agtb_out, test_agtb_high_out, test_agtb_low_out;
 
     // uut instantiation
     gt_4_sop uut
-        (.a(test_a_in), .b(test_b_in), .agtb(test_agtb_out));
+        (.a(test_a_in), .b(test_b_in), .agtb(test_agtb_out), .p_agtb_high(test_agtb_high_out), .p_agtb_low(test_agtb_low_out));
     
     initial
     begin
