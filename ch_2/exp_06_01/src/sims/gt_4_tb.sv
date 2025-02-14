@@ -1,7 +1,7 @@
 `timescale 1 ns/10 ps
 
 
-module  gt_2_sop_testbench;
+module  gt_4_sop_testbench;
 
     logic [3:0] test_a_in, test_b_in;
     logic test_agtb_out;
