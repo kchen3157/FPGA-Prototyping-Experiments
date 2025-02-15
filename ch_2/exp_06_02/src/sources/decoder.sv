@@ -18,3 +18,30 @@ module decoder_2_4
     assign bcode[3] = (en & en_w[3]);
 
 endmodule
+
+module decoder_3_8
+    (
+        input logic en,
+        input logic [2:0] a,
+        output logic [7:0] bcode
+    );
+
+    wire [3:0] decoder_bcode_hi_w, decoder_bcode_lo_w;
+
+    decoder_2_4 decoder_2_4_hi
+        (.en(a[2]), .a(a[1:0]), .bcode(decoder_bcode_hi_w));
+
+    decoder_2_4 decoder_2_4_lo
+        (.en(!a[2]), .a(a[1:0]), .bcode(decoder_bcode_lo_w));
+    
+    assign bcode[0] = decoder_bcode_lo_w[0] & en;
+    assign bcode[1] = decoder_bcode_lo_w[1] & en;
+    assign bcode[2] = decoder_bcode_lo_w[2] & en;
+    assign bcode[3] = decoder_bcode_lo_w[3] & en;
+    
+    assign bcode[4] = decoder_bcode_hi_w[0] & en;
+    assign bcode[5] = decoder_bcode_hi_w[1] & en;
+    assign bcode[6] = decoder_bcode_hi_w[2] & en;
+    assign bcode[7] = decoder_bcode_hi_w[3] & en;
+
+endmodule
