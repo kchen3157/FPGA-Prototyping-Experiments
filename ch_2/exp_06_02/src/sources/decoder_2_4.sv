@@ -12,6 +12,9 @@ module decoder_2_4
     assign en_w[2] = ( a[1] & ~a[0]);
     assign en_w[3] = ( a[1] &  a[0]);
 
-    assign bcode = (en & en_w);
+    assign bcode[0] = (en & en_w[0]);
+    assign bcode[1] = (en & en_w[1]);
+    assign bcode[2] = (en & en_w[2]);
+    assign bcode[3] = (en & en_w[3]);
 
 endmodule

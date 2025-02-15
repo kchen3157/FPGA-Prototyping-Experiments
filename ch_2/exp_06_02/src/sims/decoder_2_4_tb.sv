@@ -1,6 +1,6 @@
 `timescale 1 ns/10 ps
 
-module decoder_2_4_testbench
+module decoder_2_4_testbench;
     
     logic test_en_in;
     logic [1:0] test_a_in;
