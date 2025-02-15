@@ -105,3 +105,6 @@ hw_handoff
 ipshared
 
 */*_xpr/
+
+clockInfo.txt
+build/
