@@ -8,8 +8,8 @@ module disp_mux
 );
 
 // constant declaration
-// refreshing rate around 800 Hz (50 MHz/2^16)
-localparam N = 18;
+// refreshing rate around 1 Hz (100 MHz/2^25)
+localparam N = 29;
 
 // signal declaration
 logic [N-1:0] q_reg;
