@@ -1,1 +1,7 @@
-Project Template
+Design example 3.10.1
+
+Hexadecimal digit to seven-segment LED decoder
+- Displays 8 bit hex, and the +1, on LEDs
+- Modified to not require disp_mux
+- Modified for use of single LED digit
+  - Must switch between four manually (regLSB, regMSB, incLSB, incMSB)
