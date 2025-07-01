@@ -12,8 +12,8 @@ module sign_mag_add
     logic [N-1:0] max, min;
     logic [N-2:0] sum_mag;
 
-    assign max = (a > b) ? a : b;
-    assign min = (a > b) ? b : a;
+    assign max = (a[N-2:0] > b[N-2:0]) ? a : b;
+    assign min = (a[N-2:0] > b[N-2:0]) ? b : a;
 
     always_comb
     begin
@@ -77,7 +77,7 @@ module sign_mag_add_book
 endmodule
 
 
-module top
+module top_preview
     #(parameter N = 4)
     (
         input   logic [N-1:0] a, b, a_book, b_book,
