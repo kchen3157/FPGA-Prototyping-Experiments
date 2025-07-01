@@ -6,7 +6,7 @@ module sign_mag_add_tb
     logic [N-1:0] test_a_in, test_b_in;
     logic [N-1:0] test_sum_out;
 
-    sign_mag_add sign_mag_add_uut
+    sign_mag_add_book sign_mag_add_uut
         (.a(test_a_in), .b(test_b_in), .sum(test_sum_out));
     initial
     begin
@@ -28,6 +28,9 @@ module sign_mag_add_tb
         test_a_in = 4'b1111; // -7, 0xF
         test_b_in = 4'b1010; // -2, 0xA
         # 200; // -1 (0b1001, 0x9)
+        test_a_in = 4'b1010; // -2, 0xA
+        test_b_in = 4'b0011; // 3, 0x3
+        # 200; // 1 (0b0001, 0x1)
         // stop sim
 
         $stop;
