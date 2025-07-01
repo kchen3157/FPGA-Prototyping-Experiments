@@ -34,10 +34,8 @@ module top
     assign jb[6] = jb_led[5];
     assign jb[7] = jb_led[6];
 
-    hex_to_sseg sseg_raw_0
-        (.hex(sw[3:0]), .dp(1'b0), .sseg(ja_led));
-    hex_to_sseg sseg_raw_1
-        (.hex(sw[7:4]), .dp(1'b0), .sseg(jb_led));   
+    hex_to_sseg_test sseg_test
+        (.sw(sw[7:0]), .an(2'b00), .sseg(ja_led)); 
 
 
 endmodule
