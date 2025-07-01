@@ -1,5 +1,5 @@
 # read design sources (add one line for each file)
-read_verilog -sv "src/sources/top.sv"
+read_verilog -sv "src/sources/fp_adder.sv"
 
 # read constraints
 read_xdc "src/constrs/Nexys-Video-Master.xdc"
