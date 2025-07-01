@@ -8,4 +8,4 @@ A sign-magnitude adder performs an addition operation in the sign-magnitude form
 
 We separate this process into two stages. The first sorts the operands into max and min, and the second actually performs the add operation.
 
-The adder is 4-bit (1 sign, 3 mag) by default.
+The adder is 4-bit (1 sign, 3 mag) by default. My implementation saves a LUT by removing the unnecessary logic for max/min sign decision.
