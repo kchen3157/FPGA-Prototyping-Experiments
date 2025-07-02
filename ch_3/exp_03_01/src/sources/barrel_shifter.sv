@@ -1,3 +1,5 @@
+`timescale 1 ns/10 ps
+
 module barrel_shifter_multi
     (
         input logic [7:0] a,
