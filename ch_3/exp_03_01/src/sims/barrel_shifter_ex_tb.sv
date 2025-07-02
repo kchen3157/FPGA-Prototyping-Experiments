@@ -7,7 +7,7 @@ module barrel_shifter_16_tb;
     logic test_lr;
     logic [15:0] test_y;
 
-    barrel_shifter_16 uut_barrel_shifter_16
+    barrel_shifter_rev_16 uut_barrel_shifter_rev_16
         (.a(test_a), .amt(test_amt), .lr(test_lr), .y(test_y));
 
     initial
@@ -72,7 +72,7 @@ module barrel_shifter_32_tb;
     logic test_lr;
     logic [31:0] test_y;
 
-    barrel_shifter_32 uut_barrel_shifter_32
+    barrel_shifter_rev_32 uut_barrel_shifter_rev_32
         (.a(test_a), .amt(test_amt), .lr(test_lr), .y(test_y));
 
     initial
