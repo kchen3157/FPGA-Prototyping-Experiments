@@ -9,7 +9,7 @@ module encoder_dual_priority
 
     always_comb
     begin
-        
+
         v1 = 1'b0;
         v2 = 1'b0;
         y1 = 4'h0;
