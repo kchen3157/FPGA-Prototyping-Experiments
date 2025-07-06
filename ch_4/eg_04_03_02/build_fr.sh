@@ -1,0 +1,1 @@
+vivado -mode batch -nolog -nojournal -source build_fr.tcl

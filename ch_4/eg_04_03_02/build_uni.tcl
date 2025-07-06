@@ -1,8 +1,9 @@
 # read design sources (add one line for each file)
-read_verilog -sv "src/sources/top.sv"
+read_verilog -sv "src/sources/top_uni.sv"
+read_verilog -sv "src/sources/bin_counter.sv"
 
 # read constraints
-read_xdc "src/constrs/Nexys-Video-Master.xdc"
+read_xdc "src/constrs/Nexys-Video-Master-uni.xdc"
 
 # synth
 synth_design -top "top" -part "xc7a200tsbg484-1"
