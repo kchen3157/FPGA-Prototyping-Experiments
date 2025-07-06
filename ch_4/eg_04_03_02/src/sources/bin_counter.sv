@@ -21,7 +21,7 @@ module free_run_bin_counter
     assign r_next = r_reg + 1;
 
     assign q = r_reg;
-    assign max_tick = (r_reg == 2 ** (N - 1)) ? 1'b1 : 1'b0;
+    assign max_tick = (r_reg == 2 ** N - 1) ? 1'b1 : 1'b0;
 
 endmodule
 
@@ -60,7 +60,7 @@ module univ_bin_counter
     end
 
     assign q = r_reg;
-    assign max_tick = (q == 2 ** (N - 1)) ? 1'b1 : 1'b0;
+    assign max_tick = (q == 2 ** N - 1) ? 1'b1 : 1'b0;
     assign min_tick = (q == 0) ? 1'b1 : 1'b0;
 
 endmodule
