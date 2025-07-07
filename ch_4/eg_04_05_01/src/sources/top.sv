@@ -65,8 +65,8 @@ module top
     assign  {fmc_la_2p, fmc_la_2n, fmc_la_4p, fmc_clk1_m2c_n} = w_ldsel;
 
     // Create slower clock
-    logic [15:0] r_clk_count; // 100 MHz / 2^16 ~= 1525 Hz
-    logic w_clk_slow = r_clk_count[25];
+    logic [17:0] r_clk_count; // 100 MHz / 2^18 ~= 381 Hz
+    logic w_clk_slow = r_clk_count[17];
     always @(posedge clk)
     begin
         r_clk_count <= r_clk_count + 1;

@@ -27,7 +27,7 @@ module led_4_1_mux
     always_comb
     begin
         case (r_sel_state)
-            2'b00: 
+            2'b00:
             begin
                 o_ldsel = 4'b0001;
                 o_sseg_n = i_in_n[0];
