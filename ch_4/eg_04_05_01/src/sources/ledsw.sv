@@ -1,9 +1,9 @@
 module led_switch
     (
-        input i_clk, i_reset,
-        input [7:0] i_sw,
-        output [7:0] o_sseg_n,
-        output [3:0] o_ldsel
+        input   logic i_clk, i_reset,
+        input   logic [7:0] i_sw,
+        output  logic [7:0] o_sseg_n,
+        output  logic [3:0] o_ldsel
     );
 
     logic [15:0] w_led_val;

@@ -8,7 +8,7 @@ module led_4_1_mux
         output  logic [7:0] o_sseg_n  // ACTIVE LO
     );
 
-    logic [2:0] r_sel_state, r_sel_next;
+    logic [1:0] r_sel_state, r_sel_next;
 
     always_ff @(posedge i_clk)
     begin

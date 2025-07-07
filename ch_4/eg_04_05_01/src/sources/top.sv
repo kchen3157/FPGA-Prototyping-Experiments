@@ -34,7 +34,7 @@
 
 module top
     (
-        input   logic cpu_resetn,
+        input   logic clk, cpu_resetn,
         input   logic [7:0] sw,
         output  logic [1:0] set_vadj,
         output  logic vadj_en,
@@ -62,10 +62,18 @@ module top
 
     assign {fmc_la_5n, fmc_la_8p, fmc_la_12p, fmc_clk0_m2c_n,
             fmc_la_8n, fmc_la_9p, fmc_la_3p, fmc_la_9n} = w_sseg_n;
-    assign  {fmc_clk1_m2c_n, fmc_la_4p, fmc_la_2n, fmc_la_2p} = w_ldsel;
+    assign  {fmc_la_2p, fmc_la_2n, fmc_la_4p, fmc_clk1_m2c_n} = w_ldsel;
+
+    // Create slower clock
+    logic [15:0] r_clk_count; // 100 MHz / 2^16 ~= 1525 Hz
+    logic w_clk_slow = r_clk_count[25];
+    always @(posedge clk)
+    begin
+        r_clk_count <= r_clk_count + 1;
+    end
 
     // Inst unit
     led_switch u_led_switch
-        (.i_clk(clk), .i_reset(cpu_resetn), .i_sw(sw), .o_sseg_n(w_sseg_n), .o_ldsel(w_ldsel));
+        (.i_clk(w_clk_slow), .i_reset(~cpu_resetn), .i_sw(sw), .o_sseg_n(w_sseg_n), .o_ldsel(w_ldsel));
 
 endmodule
