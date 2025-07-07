@@ -9,7 +9,7 @@ module led_switch
     logic [15:0] w_led_val;
     logic [7:0] w_led_map [3:0];
 
-    assign w_led_val = {8'h00, i_sw};
+    assign w_led_val = {({4'b0, i_sw[3:0]} + {4'b0, i_sw[7:4]}), i_sw};
 
     hex_to_sseg u_hex_to_sseg_LD1
         (.i_hex(w_led_val[3:0]), .o_sseg_n(w_led_map[0]));
