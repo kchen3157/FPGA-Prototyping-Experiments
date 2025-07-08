@@ -7,8 +7,8 @@ module stopwatch_cascade
         output  logic [3:0] o_s2, o_s1, o_s0
     );
 
-    logic [22:0] r_ms_reg;
-    logic [22:0] r_ms_next;
+    logic [24:0] r_ms_reg;
+    logic [24:0] r_ms_next;
     logic [3:0] r_s2_reg, r_s1_reg, r_s0_reg;
     logic [3:0] r_s2_next, r_s1_next, r_s0_next;
     logic w_s2_en, w_s1_en, w_s0_en;
@@ -22,7 +22,7 @@ module stopwatch_cascade
         r_s0_reg <= r_s0_next;
     end
 
-    assign r_ms_next = (i_clr || (r_ms_reg == DVSR && i_go)) ? 23'b0 :
+    assign r_ms_next = (i_clr || (r_ms_reg == DVSR && i_go)) ? 24'b0 :
                        (i_go) ? r_ms_reg + 1 :
                        r_ms_reg;
     assign r_ms_tick = (r_ms_reg == DVSR) ? 1'b1 : 1'b0;
