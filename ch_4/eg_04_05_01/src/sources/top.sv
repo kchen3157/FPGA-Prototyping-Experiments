@@ -73,7 +73,12 @@ module top
     end
 
     // Inst unit
-    led_switch u_led_switch
-        (.i_clk(w_clk_slow), .i_reset(~cpu_resetn), .i_sw(sw), .o_sseg_n(w_sseg_n), .o_ldsel(w_ldsel));
+    // led_switch u_led_switch
+    //     (.i_clk(w_clk_slow), .i_reset(~cpu_resetn), .i_sw(sw),
+    //      .o_sseg_n(w_sseg_n), .o_ldsel(w_ldsel));
+
+    led_switch_set u_led_switch_set
+        (.i_clk(w_clk_slow), .i_reset(~cpu_resetn), .i_set(sw[7:4]),
+         .i_sw(sw[3:0]), .o_sseg_n(w_sseg_n), .o_ldsel(w_ldsel));
 
 endmodule
