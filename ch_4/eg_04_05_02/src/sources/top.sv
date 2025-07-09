@@ -75,8 +75,11 @@ module top
     logic [3:0] w_s2, w_s1, w_s0;
     logic [7:0] w_led_map [3:0];
 
-    stopwatch_cascade u_stopwatch_cascade
-        (.i_clk(clk), .i_go(btnc), .i_clr(~cpu_resetn), .o_s2(w_s2), .o_s1(w_s1), .o_s0(w_s0));
+    // stopwatch_cascade u_stopwatch_cascade
+    //     (.i_clk(clk), .i_go(btnc), .i_clr(~cpu_resetn), .o_s2(w_s2), .o_s1(w_s1), .o_s0(w_s0));
+
+    stopwatch_if u_stopwatch_cascade
+       (.i_clk(clk), .i_go(btnc), .i_clr(~cpu_resetn), .o_s2(w_s2), .o_s1(w_s1), .o_s0(w_s0));
 
     hex_to_sseg u_hex_to_sseg_LD1
         (.i_hex(w_s0), .o_sseg_n(w_led_map[0]));
