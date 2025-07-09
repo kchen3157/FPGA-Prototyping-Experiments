@@ -82,16 +82,16 @@ module top
        (.i_clk(clk), .i_go(btnc), .i_clr(~cpu_resetn), .o_s2(w_s2), .o_s1(w_s1), .o_s0(w_s0));
 
     hex_to_sseg u_hex_to_sseg_LD1
-        (.i_hex(w_s0), .o_sseg_n(w_led_map[0]));
+        (.i_hex(w_s0), .i_dp(1'b0), .o_sseg_n(w_led_map[0]));
 
     hex_to_sseg u_hex_to_sseg_LD2
-        (.i_hex(w_s1), .o_sseg_n(w_led_map[1]));
+        (.i_hex(w_s1), .i_dp(1'b1), .o_sseg_n(w_led_map[1]));
 
     hex_to_sseg u_hex_to_sseg_LD3
-        (.i_hex(w_s2), .o_sseg_n(w_led_map[2]));
+        (.i_hex(w_s2), .i_dp(1'b0), .o_sseg_n(w_led_map[2]));
 
     hex_to_sseg u_hex_to_sseg_LD4
-        (.i_hex(4'h0), .o_sseg_n(w_led_map[3]));
+        (.i_hex(4'h0), .i_dp(1'b0), .o_sseg_n(w_led_map[3]));
 
     led_4_1_mux u_led_4_1_mux
         (.i_clk(w_clk_slow), .i_reset(~cpu_resetn), .i_in_n(w_led_map), .o_ldsel(w_ldsel), .o_sseg_n(w_sseg_n));
