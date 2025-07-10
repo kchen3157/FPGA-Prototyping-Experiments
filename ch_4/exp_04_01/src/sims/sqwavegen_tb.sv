@@ -3,7 +3,7 @@ module square_wave_gen_tb;
     localparam CLOCK_PER = 10;
 
     logic i_clk, i_rst;
-    logic [3:0] i_m, i_n, i_rst;
+    logic [3:0] i_m, i_n;
     logic o_q;
 
     square_wave_gen square_wave_gen_uut
