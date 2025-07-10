@@ -5,6 +5,7 @@ module pwm_gen_tb;
     logic i_clk, i_rst;
     logic [3:0] i_w;
     logic o_q;
+    logic [3:0] o_test_duty_count;
 
     pwm_gen pwm_gen_uut
         (.*);
