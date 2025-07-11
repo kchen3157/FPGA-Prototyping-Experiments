@@ -24,7 +24,8 @@ module led_switch
         (.i_hex(w_led_val[15:12]), .i_dp(1'b0), .o_sseg_n(w_led_map[3]));
 
     led_4_1_mux u_led_4_1_mux
-        (.i_clk(i_clk), .i_reset(i_reset), .i_in_n(w_led_map), .o_ldsel(o_ldsel), .o_sseg_n(o_sseg_n));
+        (.i_clk(i_clk), .i_reset(i_reset), .i_in_n(w_led_map),
+        .i_pwm_ctl(4'b1111), .o_ldsel(o_ldsel), .o_sseg_n(o_sseg_n));
 
 endmodule
 
@@ -67,6 +68,7 @@ module led_switch_set
         (.i_hex(r_hex4), .i_dp(1'b0), .o_sseg_n(w_led_map[3]));
 
     led_4_1_mux u_led_4_1_mux
-        (.i_clk(i_clk), .i_reset(i_reset), .i_in_n(w_led_map), .o_ldsel(o_ldsel), .o_sseg_n(o_sseg_n));
+        (.i_clk(i_clk), .i_reset(i_reset), .i_in_n(w_led_map),
+        .i_pwm_ctl(4'b1111), .o_ldsel(o_ldsel), .o_sseg_n(o_sseg_n));
 
 endmodule

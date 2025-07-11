@@ -3,15 +3,13 @@ module pwm_gen
     (
         input   logic i_clk, i_rst,
         input   logic [3:0] i_w,
-        output  logic o_q,
-        output  logic [3:0] o_test_duty_count
+        output  logic o_q
     );
 
     logic r_state; // 0->low, 1->high
     logic [3:0] r_duty_count;
     logic w_state_next;
     logic [3:0] w_duty_count_next;
-    assign o_test_duty_count = r_duty_count;
     always_ff @(posedge i_clk)
     begin
         if (i_rst)
