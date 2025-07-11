@@ -35,7 +35,7 @@
 module top
     (
         input   logic clk, cpu_resetn,
-        input   logic sw,
+        input   logic [1:0] sw,
         output  logic [1:0] set_vadj,
         output  logic vadj_en,
         output  logic fmc_clk0_m2c_n,
@@ -77,8 +77,8 @@ module top
     logic [7:0] w_led_map [3:0];
 
     stopwatch_cascade u_stopwatch_cascade
-        (.i_clk(clk), .i_go(sw), .i_clr(~cpu_resetn), .o_s3(w_s3),
-         .o_s2(w_s2), .o_s1(w_s1), .o_s0(w_s0));
+        (.i_clk(clk), .i_go(sw[0]), .i_up(sw[1]), .i_clr(~cpu_resetn),
+         .o_s3(w_s3), .o_s2(w_s2), .o_s1(w_s1), .o_s0(w_s0));
         
     hex_to_sseg u_hex_to_sseg_LD1
         (.i_hex(w_s0), .i_dp(1'b0), .o_sseg_n(w_led_map[0]));
@@ -93,6 +93,7 @@ module top
         (.i_hex(w_s3), .i_dp(1'b1), .o_sseg_n(w_led_map[3]));
 
     led_4_1_mux u_led_4_1_mux
-        (.i_clk(w_clk_slow), .i_reset(~cpu_resetn), .i_in_n(w_led_map), .o_ldsel(w_ldsel), .o_sseg_n(w_sseg_n));
+        (.i_clk(w_clk_slow), .i_reset(~cpu_resetn), .i_in_n(w_led_map),
+         .o_ldsel(w_ldsel), .o_sseg_n(w_sseg_n));
 
 endmodule
