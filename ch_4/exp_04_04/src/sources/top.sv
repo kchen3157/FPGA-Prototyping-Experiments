@@ -64,8 +64,8 @@ module top
             fmc_la_8n, fmc_la_9p, fmc_la_3p, fmc_la_9n} = w_sseg_n;
     assign  {fmc_la_2p, fmc_la_2n, fmc_la_4p, fmc_clk1_m2c_n} = w_ldsel;
 
-    // Create slower clock
-    localparam SLOW_CLK_N = 25; // 100 MHz / 2^25 ~= 381 Hz
+    // Create slower clock for display mux
+    localparam SLOW_CLK_N = 15; // 100 MHz / 2^15 ~= 3.1 kHz
     logic [SLOW_CLK_N-1:0] r_clk_count;
     logic w_clk_slow;
     assign w_clk_slow = r_clk_count[SLOW_CLK_N-1];
@@ -74,14 +74,25 @@ module top
         r_clk_count <= r_clk_count + 1;
     end
 
-    logic [7:0] w_sseg_map_n [3:0]
+    // Create 72bpm (3.6tps) clock for pattern
+    localparam DVSR = 27_777_778; // 3.6tps -> T = 1/3.6 s ~= 27,777,778 * 10ns
+    logic [$clog2(DVSR)-1:0] r_pat_clk_count;
+    logic w_pat_clk;
+    assign w_pat_clk = (r_pat_clk_count == DVSR - 1) ? 1'b1 : 1'b0;
+    always @(posedge clk)
+    begin
+        r_pat_clk_count <= r_pat_clk_count + 1;
+    end
 
-    rotating_square_sseg u_rotating_square_sseg
-        (.i_clk(w_clk_slow), i_rst(~cpu_resetn), i_cw(sw[1]), i_en(sw[0]),
+    logic [7:0] w_sseg_map_n [3:0];
+
+
+    heartbeat_sseg u_heartbeat_sseg
+        (.i_clk(w_pat_clk), .i_rst(~cpu_resetn),
          .o_sseg_n(w_sseg_map_n));
 
     led_4_1_mux u_led_4_1_mux
-        (.i_clk(i_clk), i_reset(~cpu_resetn), i_in_n(w_sseg_map_n),
+        (.i_clk(w_clk_slow), .i_reset(~cpu_resetn), .i_in_n(w_sseg_map_n),
          .o_ldsel(w_ldsel), .o_sseg_n(w_sseg_n));
 
 endmodule
