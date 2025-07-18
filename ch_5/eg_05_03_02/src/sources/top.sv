@@ -48,7 +48,7 @@ module top
                       fmc_la_9p, fmc_la_12p,
 
         // Probing
-        output  logic ja0, ja1
+        output  logic ja0, ja1, ja2, ja3, ja4, jb0
     );
 
     // Set v_adj to 1.8V
@@ -65,7 +65,8 @@ module top
     logic [7:0] w_lvl_count, w_lvl_db_count;
     debounce_counter u_debounce_counter
         (.i_clk(clk), .i_rst(~cpu_resetn), .i_clr(btnu), .i_lvl(btnc),
-         .o_lvl_count(w_lvl_count), .o_lvl_db_count(w_lvl_db_count), .o_lvl_db(ja0));
+         .o_lvl_count(w_lvl_count), .o_lvl_db_count(w_lvl_db_count), .o_lvl_db(ja0),
+        .o_debounce_state({ja4, ja3, ja2}), .o_slow_tick(jb0));
 
     assign ja1 = btnc;
 

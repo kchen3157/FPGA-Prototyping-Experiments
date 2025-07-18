@@ -5,13 +5,16 @@ module debounce_counter
         input   logic i_lvl,
         output  logic [7:0] o_lvl_count,
         output  logic [7:0] o_lvl_db_count,
-        output  logic o_lvl_db
+        output  logic o_lvl_db,
+        output  logic [3:0] o_debounce_state,
+        output  logic o_slow_tick
     );
 
     logic w_lvl_db;
 
     debouncer u_debouncer
-        (.i_clk(i_clk), .i_rst(i_rst), .i_sw(i_lvl), .o_sw_debounced(w_lvl_db));
+        (.i_clk(i_clk), .i_rst(i_rst), .i_sw(i_lvl), .o_sw_debounced(w_lvl_db),
+         .o_debounce_state(o_debounce_state), .o_slow_tick(o_slow_tick));
 
     // positive edge detector
     logic r_lvl, r_lvl_db;
