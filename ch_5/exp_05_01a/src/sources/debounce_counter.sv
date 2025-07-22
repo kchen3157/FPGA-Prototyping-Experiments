@@ -6,7 +6,7 @@ module debounce_counter
         output  logic [7:0] o_lvl_count,
         output  logic [7:0] o_lvl_db_count,
         output  logic o_lvl_db,
-        output  logic [3:0] o_debounce_state,
+        output  logic [2:0] o_debounce_state,
         output  logic o_slow_tick
     );
 
@@ -21,7 +21,7 @@ module debounce_counter
     dualedge_detector_moore u_dualedge_detector_mealy_lvl
         (.i_clk(i_clk), .i_rst(i_rst), .i_lvl(i_lvl), .o_edge(w_lvl_edge));
     dualedge_detector_moore u_dualedge_detector_mealy_db
-        (.i_clk(i_clk), .i_rst(i_rst), .i_lvl(w_lvl_db), .o_edge(w_lvl_edge1));
+        (.i_clk(i_clk), .i_rst(i_rst), .i_lvl(w_lvl_db), .o_edge(w_lvl_db_edge));
 
 
     // counter
