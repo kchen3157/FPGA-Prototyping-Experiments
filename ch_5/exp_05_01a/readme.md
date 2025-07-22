@@ -11,5 +11,4 @@ A dual-edge detector is similar to a rising-edge detector except that the output
 
 
 ## Implementation
-This 
-A slow clock of around 6.25 MHz is used in this implementation. The top routes the detector input to the first switch, and outputs the slow clock, raw switch, and edge detect to pmod ja0, ja1, and ja2 respectively.
+This implementation tests the dual-edge detector by placing it within the debounce counter from section 5.3.3.
