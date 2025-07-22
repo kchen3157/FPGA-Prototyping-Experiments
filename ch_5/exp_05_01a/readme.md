@@ -8,3 +8,8 @@ A dual-edge detector is similar to a rising-edge detector except that the output
 4. Replace the rising detectors in Section 5.3.3 with dual-edge detectors and verify their operations. 
     - Implemented in exp_05_01a.
 5. Repeat steps 1 to 4 for a Mealy machine–based design.
+
+
+## Implementation
+This 
+A slow clock of around 6.25 MHz is used in this implementation. The top routes the detector input to the first switch, and outputs the slow clock, raw switch, and edge detect to pmod ja0, ja1, and ja2 respectively.

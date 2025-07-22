@@ -6,7 +6,7 @@ module debounce_counter
         output  logic [7:0] o_lvl_count,
         output  logic [7:0] o_lvl_db_count,
         output  logic o_lvl_db,
-        output  logic [3:0] o_debounce_state,
+        output  logic [2:0] o_debounce_state,
         output  logic o_slow_tick
     );
 
@@ -16,16 +16,13 @@ module debounce_counter
         (.i_clk(i_clk), .i_rst(i_rst), .i_sw(i_lvl), .o_sw_debounced(w_lvl_db),
          .o_debounce_state(o_debounce_state), .o_slow_tick(o_slow_tick));
 
-    // positive edge detector
-    logic r_lvl, r_lvl_db;
-    logic w_lvl_posedge, w_lvl_db_posedge;
-    always_ff @(posedge i_clk)
-    begin
-        r_lvl <= i_lvl;
-        r_lvl_db <= w_lvl_db;
-    end
-    assign w_lvl_posedge = ~r_lvl & i_lvl;
-    assign w_lvl_db_posedge = ~r_lvl_db & w_lvl_db;
+    // edge detectors
+    logic w_lvl_edge, w_lvl_db_edge;
+    dualedge_detector_moore u_dualedge_detector_mealy_lvl
+        (.i_clk(i_clk), .i_rst(i_rst), .i_lvl(i_lvl), .o_edge(w_lvl_edge));
+    dualedge_detector_moore u_dualedge_detector_mealy_db
+        (.i_clk(i_clk), .i_rst(i_rst), .i_lvl(w_lvl_db), .o_edge(w_lvl_db_edge));
+
 
     // counter
     logic [7:0] r_lvl_count, r_lvl_db_count;
@@ -36,10 +33,10 @@ module debounce_counter
         r_lvl_db_count <= w_lvl_db_count_next;
     end
     assign w_lvl_count_next = (i_clr) ? 0 :
-                              (w_lvl_posedge) ? r_lvl_count + 1 :
+                              (w_lvl_edge) ? r_lvl_count + 1 :
                               r_lvl_count;
     assign w_lvl_db_count_next = (i_clr) ? 0 :
-                                 (w_lvl_db_posedge) ? r_lvl_db_count + 1 :
+                                 (w_lvl_db_edge) ? r_lvl_db_count + 1 :
                                  r_lvl_db_count;
 
     // output
