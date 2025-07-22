@@ -41,7 +41,7 @@ module debouncer
             r_debounce_state <= w_debounce_state_next;
     end
     assign o_debounce_state = r_debounce_state;
-    
+
     // combined next state and output logic
     always_comb
     begin

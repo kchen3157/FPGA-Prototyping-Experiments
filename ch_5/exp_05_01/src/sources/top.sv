@@ -19,7 +19,7 @@ module top
     // dualedge_detector_moore u_dualedge_detector_moore
     //     (.i_clk(w_slow_tick), .i_rst(~cpu_resetn), .i_lvl(sw),
     //      .o_edge(ja1));
-    
+
     dualedge_detector_mealy u_dualedge_detector_mealy
         (.i_clk(w_slow_tick), .i_rst(~cpu_resetn), .i_lvl(sw),
          .o_edge(ja1));

@@ -30,7 +30,7 @@ module hex_to_sseg
             default: r_sseg_n = 7'b1111111;
         endcase
     end
-    
+
     assign o_sseg_n = {~i_dp, r_sseg_n};
 
 endmodule
