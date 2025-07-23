@@ -8,7 +8,8 @@ module debouncer_early_det
         output  logic o_sw_debounced
     );
 
-    typedef enum logic {e_zero, e_wait1, e_one, e_wait0} t_debounce_state;
+    typedef enum logic [1:0] {e_zero, e_wait1, e_one, e_wait0} t_debounce_state;
+    t_debounce_state r_debounce_state, w_debounce_state_next;
 
     // generate 20ms tick
     logic w_slow_tick;
@@ -28,7 +29,6 @@ module debouncer_early_det
     assign w_slow_tick = (r_tick_counter == TICK_PERIOD_10NS) ? 1'b1 : 1'b0;
 
     // state register
-    t_debounce_state r_debounce_state, w_debounce_state_next;
     always_ff @(posedge i_clk, posedge i_rst)
     begin
         if (i_rst)
@@ -36,32 +36,41 @@ module debouncer_early_det
         else
             r_debounce_state <= w_debounce_state_next;
     end
-    assign o_debounce_state = r_debounce_state;
 
     // next state logic
     always_comb
     begin
-        w_debounce_state_next = r_debounce_state
+        w_debounce_state_next = r_debounce_state;
         case (r_debounce_state)
             e_zero:
+            begin
+                o_sw_debounced = 1'b0;
                 if (i_sw)
                     w_debounce_state_next = e_wait1;
+            end
             e_wait1:
             begin
+                o_sw_debounced = 1'b1;
                 if (w_slow_tick)
                     w_debounce_state_next = (i_sw) ? e_one : e_zero;
             end
             e_one:
+            begin
+                o_sw_debounced = 1'b1;
                 if (~i_sw)
                     w_debounce_state_next = e_wait0;
+            end
             e_wait0:
             begin
+                o_sw_debounced = 1'b0;
                 if (w_slow_tick)
                     w_debounce_state_next = (i_sw) ? e_one : e_zero;
+            end
+            default:
+            begin
+                o_sw_debounced = 1'b0;
             end
         endcase
     end
 
-    // output logic
-    assign o_sw_debounced = ((r_debounce_state == e_one) || (r_debounce_state == e_wait1)) ? 1'b1 : 1'b0;
 endmodule
