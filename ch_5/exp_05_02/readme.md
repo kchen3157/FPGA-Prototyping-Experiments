@@ -7,3 +7,7 @@ The early detection debouncing scheme is discussed in Section 5.3.2. The output 
 3. Derive the HDL code based on the state diagram and ASM chart. 
 4. Derive a testbench and use simulation to verify operation of the code. 
 5. Replace the debouncing circuit in Section 5.3.3 with the alternative design and verify its operation.
+
+
+# Implementation
+My implementation reuses the debouncing edge counter circuit from experiment 5.5.1. There are only two testpoints, the debounced button and the raw button, connected to ja0 and ja1 respectively.
