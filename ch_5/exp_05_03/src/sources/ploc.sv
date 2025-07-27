@@ -73,6 +73,8 @@ module parking_lot_occupancy_counter
                 end
                 else if (i_a & ~i_b)
                     w_ploc_state_next = r_ploc_state;
+            default:
+                w_ploc_state_next = e_unblocked;
         endcase
     end
 
