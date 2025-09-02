@@ -27,10 +27,16 @@ module top
 
     // Set v_adj to 1.8V
     assign vadj_en = 1'b1;
-    assign set_vadj = 2'b01;
+    assign set_vadj = 2'b11;
+
+    logic [1:0] w_dw_db;
+    debouncer_early_det u_debouncer_early_det_0
+        (.i_clk(clk), .i_rst(~cpu_resetn), .i_sw(sw[0]), .o_sw_debounced(w_dw_db[0]));
+    debouncer_early_det u_debouncer_early_det_1
+        (.i_clk(clk), .i_rst(~cpu_resetn), .i_sw(sw[1]), .o_sw_debounced(w_dw_db[1]));
 
     parking_lot_occupancy_counter u_parking_lot_occupancy_counter
-        (.i_clk(clk), .i_rst(~cpu_resetn), .i_a(sw[0]), .i_b(sw[1]),
+        (.i_clk(clk), .i_rst(~cpu_resetn), .i_a(w_dw_db[0]), .i_b(w_dw_db[1]),
          .o_car_enter(w_car_enter), .o_car_exit(w_car_exit));
 
     countreg u_countreg

@@ -4,6 +4,7 @@ read_verilog -sv "src/sources/ploc.sv"
 read_verilog -sv "src/sources/countreg.sv"
 read_verilog -sv "src/sources/hextosseg.sv"
 read_verilog -sv "src/sources/ledmux.sv"
+read_verilog -sv "src/sources/debounce.sv"
 
 
 # read constraints

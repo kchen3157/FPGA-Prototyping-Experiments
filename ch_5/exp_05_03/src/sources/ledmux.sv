@@ -13,7 +13,7 @@ module led_4_1_mux
     logic [SLOW_CLK_N-1:0] r_clk_count;
     logic w_clk_slow;
     assign w_clk_slow = r_clk_count[SLOW_CLK_N-1];
-    always @(posedge i_clk)
+    always_ff @(posedge i_clk)
     begin
         r_clk_count <= r_clk_count + 1;
     end

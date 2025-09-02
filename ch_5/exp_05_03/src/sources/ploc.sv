@@ -7,8 +7,8 @@ module parking_lot_occupancy_counter
         output  logic o_car_exit
     );
 
-    typedef enum logic [2:0] {e_unblocked, e_enter_a, e_enter_both, e_enter_b,
-                              e_exit_b, e_exit_both, e_exit_a} t_ploc_state;
+    typedef enum logic [2:0] {e_unblocked = 3'h0, e_enter_a = 3'h1, e_enter_both = 3'h2, e_enter_b = 3'h3,
+                              e_exit_b = 3'h4, e_exit_both = 3'h5, e_exit_a = 3'h6} t_ploc_state;
     t_ploc_state r_ploc_state, w_ploc_state_next;
 
     // state register
