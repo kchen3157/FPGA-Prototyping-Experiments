@@ -77,6 +77,7 @@ module debouncer_fsmd_exp
             end
             e_wait0:
             begin
+                o_sw_debounced = 1'b1;
                 if (~i_sw)
                 begin
                     w_tick_dec = 1'b1;
