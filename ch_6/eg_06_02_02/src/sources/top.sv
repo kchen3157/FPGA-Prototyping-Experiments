@@ -8,7 +8,12 @@ module top
 
     assign ja[0] = sw;
 
-    debouncer_fsmd_exp u_debouncer_fsmd_exp
+    // debouncer_fsmd_exp u_debouncer_fsmd_exp
+    //     (.i_clk(clk), .i_rst(~cpu_resetn), .i_sw(sw),
+    //      .o_sw_debounced(ja[1]), .o_rising(ja[2]));
+
+
+    debouncer_fsmd_imp u_debouncer_fsmd_imp
         (.i_clk(clk), .i_rst(~cpu_resetn), .i_sw(sw),
          .o_sw_debounced(ja[1]), .o_rising(ja[2]));
 

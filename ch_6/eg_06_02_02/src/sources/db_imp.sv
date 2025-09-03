@@ -1,0 +1,99 @@
+`timescale 1 ns/10 ps
+
+module debouncer_fsmd_imp
+    #(parameter TICK_PERIOD_10NS = 2_000_000) // tick period in 10s of ns
+    (
+        input   logic i_clk, i_rst,
+        input   logic i_sw,
+        output  logic o_sw_debounced, o_rising,
+
+        // TEST POINTS
+        output  logic [1:0] tp_state
+    );
+
+    typedef enum logic [1:0] {e_zero, e_wait1, e_one, e_wait0} t_debounce_state;
+    t_debounce_state r_debounce_state, w_debounce_state_next;
+    assign tp_state = r_debounce_state;
+
+    // generate tick and control
+    logic [$clog2(TICK_PERIOD_10NS)-1:0] r_tick_counter, w_tick_counter_next;
+    logic w_tick, w_tick_dec, w_tick_load;
+
+    // state and data register
+    always_ff @(posedge i_clk, posedge i_rst)
+    begin
+        if (i_rst)
+        begin
+            r_debounce_state <= e_zero;
+            r_tick_counter <= 0;
+        end
+        else
+        begin
+            r_debounce_state <= w_debounce_state_next;
+            r_tick_counter <= w_tick_counter_next;
+        end
+    end
+
+    // next state logic
+    always_comb
+    begin
+        // defaults
+        w_debounce_state_next = r_debounce_state;
+        w_tick_counter_next = r_tick_counter;
+        o_sw_debounced = 1'b0;
+        o_rising = 1'b0;
+
+        case (r_debounce_state)
+            e_zero:
+            begin
+                if (i_sw)
+                begin
+                    w_debounce_state_next = e_wait1;
+                    w_tick_counter_next = {$clog2(TICK_PERIOD_10NS){1'b1}};
+                end
+            end
+            e_wait1:
+            begin
+                if (i_sw)
+                begin
+                    w_tick_counter_next = r_tick_counter - 1;
+                    if (w_tick_counter_next == 0)
+                    begin
+                        w_debounce_state_next = e_one;
+                        o_rising = 1'b1;
+                    end
+                end
+                else
+                    w_debounce_state_next = e_zero;
+            end
+            e_one:
+            begin
+                o_sw_debounced = 1'b1;
+                if (~i_sw)
+                begin
+                    w_debounce_state_next = e_wait0;
+                    w_tick_counter_next = {$clog2(TICK_PERIOD_10NS){1'b1}};
+                end
+            end
+            e_wait0:
+            begin
+                o_sw_debounced = 1'b1;
+                if (~i_sw)
+                begin
+                    w_tick_counter_next = r_tick_counter - 1;
+                    if (w_tick_counter_next == 0)
+                    begin
+                        w_debounce_state_next = e_zero;
+                    end
+                end
+                else
+                    w_debounce_state_next = e_one;
+            end
+            default:
+            begin
+                w_debounce_state_next = e_zero;
+            end
+        endcase
+    end
+
+endmodule
