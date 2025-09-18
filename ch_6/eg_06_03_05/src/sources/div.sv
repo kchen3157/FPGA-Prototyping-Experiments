@@ -11,8 +11,8 @@ module div
     typedef enum {e_idle, e_operate, e_last, e_done} t_div_state;
 
     t_div_state r_div_state, w_div_state_next; // FSM state
-    logic [WIDTH-1:0] r_dividend_lo, w_dividend_lo_next; // Lower bits of 8-bit extended dividend
-    logic [WIDTH-1:0] r_dividend_hi, w_dividend_hi_next; // Higher bits of 8-bit extended dividend
+    logic [WIDTH-1:0] r_dividend_lo, w_dividend_lo_next; // Lower bits of extended dividend
+    logic [WIDTH-1:0] r_dividend_hi, w_dividend_hi_next; // Higher bits of extended dividend (init filled with 0)
     logic [WIDTH-1:0] r_divisor, w_divisor_next;
     logic [$clog2(WIDTH + 1):0] r_index, w_index_next;
 

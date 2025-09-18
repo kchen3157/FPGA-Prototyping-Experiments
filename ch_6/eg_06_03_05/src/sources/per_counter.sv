@@ -29,7 +29,7 @@ module per_counter
             r_state <= w_state_next;
             r_count_10ns <= w_count_10ns_next;
             r_count_ms <= w_count_ms_next;
-            r_prev_signal = w_prev_signal_next;
+            r_prev_signal <= w_prev_signal_next;
         end
     end
 
