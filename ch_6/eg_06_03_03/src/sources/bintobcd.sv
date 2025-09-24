@@ -64,7 +64,7 @@ module bintobcd
         case (r_state)
             e_ready:
             begin
-                o_ready = 1'b0;
+                o_ready = 1'b1;
                 if (i_start)
                 begin
                     w_bin_next = i_bin;
