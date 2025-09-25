@@ -1,17 +1,18 @@
-module fib
+module fib_operator
     (
         input   logic i_clk, i_rst,
         input   logic i_start,
         input   logic [4:0] i_gen_amt,
         output  logic o_ready, o_done_tick,
-        output  logic [19:0] o_final
+        output  logic [13:0] o_final,
+        output  logic o_overflow
     );
 
     typedef enum logic [1:0] {e_idle, e_operate, e_done} t_fib_state;
 
     t_fib_state r_state, w_state_next;
-    logic [19:0] r_temp0, w_temp0_next;
-    logic [19:0] r_temp1, w_temp1_next;
+    logic [13:0] r_temp0, w_temp0_next;
+    logic [13:0] r_temp1, w_temp1_next;
     logic [4:0] r_num, w_num_next;
 
     // FSMD state/data registers
@@ -46,6 +47,7 @@ module fib
         o_ready = 1'b0;
         o_done_tick = 1'b0;
         o_final = r_temp1;
+        o_overflow = 1'b0;
 
         case (r_state)
             e_idle:
@@ -57,6 +59,12 @@ module fib
                     w_temp1_next = 20'd1;
                     w_num_next = i_gen_amt;
                     w_state_next = e_operate;
+                    if (i_gen_amt > 20)
+                    begin
+                        w_temp1_next = 14'd9999;
+                        o_overflow = 1'b1;
+                        w_state_next = e_done;
+                    end
                 end
             end
             e_operate:
