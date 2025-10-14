@@ -1,10 +1,23 @@
+// This is a Fibonacci sequence generating circuit.
+//
+//! Although it outputs 4 bytes, this generator is limited
+//! to output a maximum of 9999 above the fibonacci generator
+//! amount of 20 (F(20) = 6765, F(21) = 10946), to support
+//! a 4 digit BCD conversion.
+//
+// TESTED INPUT(i_gen_amt): 5 Bit Binary 0d00->0d32 (0x00->0x20)
+// TESTED OUTPUT(o_final): 4 Byte Binary 0d0000->0d9999 (0x0000->0x270F)
+
+
+`timescale 1 ns/10 ps
+
 module fib_operator
     (
         input   logic i_clk, i_rst,
         input   logic i_start,
         input   logic [4:0] i_gen_amt,
         output  logic o_ready, o_done_tick,
-        output  logic [13:0] o_final,
+        output  logic [15:0] o_final,
         output  logic o_overflow
     );
 
@@ -46,7 +59,7 @@ module fib_operator
 
         o_ready = 1'b0;
         o_done_tick = 1'b0;
-        o_final = r_temp1;
+        o_final = {2'b00, r_temp1};
         o_overflow = 1'b0;
 
         case (r_state)
