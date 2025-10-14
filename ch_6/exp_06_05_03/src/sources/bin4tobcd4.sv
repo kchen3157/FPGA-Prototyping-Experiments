@@ -1,8 +1,20 @@
-module bintobcd
+// This is a 4 Byte Binary to 4 Digit BCD (Binary-Coded Decimal) circuit that is 
+// designed for use in the output logic of the Fibonacci generator.
+//
+//! The conversion is input limited, any input larger than 0x270F (0d9999) will
+//! result in undefined output.
+//
+// TESTED INPUT: 4 Byte Binary (0x0000->0x270F)
+// TESTED OUTPUT: 4 Digit BCD (0000->9999)
+
+`timescale 1 ns/10 ps
+
+module bin4tobcd4
     (
         input   logic i_clk, i_rst,
         input   logic i_start,
-        input   logic [12:0] i_bin,
+        input   logic [15:0] i_bin,
+
         output  logic o_ready, o_done,
         output  logic [3:0] o_bcd3, o_bcd2, o_bcd1, o_bcd0
     );
@@ -10,7 +22,7 @@ module bintobcd
     typedef enum logic [1:0] {e_ready, e_operation, e_done} t_state;
 
     t_state r_state, w_state_next;
-    logic [12:0] r_bin, w_bin_next;
+    logic [15:0] r_bin, w_bin_next;
     logic [3:0] r_bcd0, w_bcd0_next, w_bcd0_adj;
     logic [3:0] r_bcd1, w_bcd1_next, w_bcd1_adj;
     logic [3:0] r_bcd2, w_bcd2_next, w_bcd2_adj;
@@ -72,7 +84,7 @@ module bintobcd
                     w_bcd1_next = 4'h0;
                     w_bcd2_next = 4'h0;
                     w_bcd3_next = 4'h0;
-                    w_index_next = 4'hD;
+                    w_index_next = 4'hE; // 16 - 1 bits
                     w_state_next = e_operation;
                 end
             end
@@ -85,7 +97,7 @@ module bintobcd
                     w_bcd3_next = {w_bcd3_adj[2:0], w_bcd2_adj[3]};
                     w_bcd2_next = {w_bcd2_adj[2:0], w_bcd1_adj[3]};
                     w_bcd1_next = {w_bcd1_adj[2:0], w_bcd0_adj[3]};
-                    w_bcd0_next = {w_bcd0_adj[2:0], r_bin[12]};
+                    w_bcd0_next = {w_bcd0_adj[2:0], r_bin[13]};
                     w_bin_next = (r_bin << 1);
                     w_index_next = r_index - 1;
                 end
