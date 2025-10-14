@@ -1,6 +1,5 @@
 // This is a BCD (Binary-Coded Decimal) to Binary circuit that is designed for
-// use in the input logic of the Fibonacci generator. Because the output of the
-// generator is limited to 9999, usage in the generator should not surpass 20 (6765).
+// use in the input logic of the Fibonacci generator.
 //
 // TESTED INPUT: 2 Digit BCD (00->99)
 // TESTED OUTPUT: 2 Byte Binary (0x00->0x63)

@@ -1,0 +1,67 @@
+// Testbench for Fibonacci Generator control module
+//
+// TESTED INPUT(i_gen_amt): 8 Bit Binary 0d000->0d255 (0x00->0xFF)
+// TESTED OUTPUT(o_final): 4 Byte Binary 0d0000->0d9999 (0x0000->0x270F)
+// 
+// SIMULATION TIME: ~32 ms
+
+`timescale 1 ns/10 ps
+
+module fib_ctl_tb;
+
+    localparam CLOCK_T = 10; // 10 ns -> 100 MHz
+
+    logic i_clk, i_rst;
+    logic i_start;
+    logic [3:0] i_gen_amt_bcd [1:0];
+    logic [3:0] o_final_bcd [3:0];
+    logic o_ready, o_done;
+
+    fib_ctl uut_fib_ctl
+        (.*);
+
+    always // generate clock
+    begin
+        i_clk = 1'b1;
+        #(CLOCK_T/2);
+        i_clk = 1'b0;
+        #(CLOCK_T/2);
+    end
+
+    initial
+    begin
+        // first reset
+        i_rst = 1'b1;
+        i_start = 1'b0;
+        i_gen_amt_bcd[0] = 4'h0;
+        i_gen_amt_bcd[1] = 4'h1;
+        @(posedge i_clk);
+        i_rst = 1'b0;
+        
+        // wait some
+        repeat(3) @(posedge i_clk);
+        
+        // start counting
+        for (int i = 4'h0; i <= 4'h9; i = i + 1)
+        begin
+            for (int j = 4'h0; j <= 4'h9; j = j + 1)
+            begin
+                wait (o_ready == 1'b1);
+                i_gen_amt_bcd[0] = j;
+                i_gen_amt_bcd[1] = i;
+                @(posedge i_clk);
+                i_start = 1'b1;
+                @(posedge i_clk);
+                i_start = 1'b0;
+                wait (o_done == 1'b1);
+            end
+        end
+
+        // wait some more
+        repeat(3) @(posedge i_clk);
+
+        $stop;
+    end
+    
+    
+endmodule
