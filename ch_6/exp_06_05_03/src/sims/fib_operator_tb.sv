@@ -1,9 +1,9 @@
-// Testbench for 4 Byte Binary to 4 Digit BCD converter
+// Testbench for Fibonacci Operator/Generator
 //
-// TESTED INPUT: 4 Byte Binary (0x0000->0x270F)
-// TESTED OUTPUT: 4 Digit BCD (0000->9999)
+// TESTED INPUT(i_gen_amt): 8 Bit Binary 0d000->0d255 (0x00->0xFF)
+// TESTED OUTPUT(o_final): 4 Byte Binary 0d0000->0d9999 (0x0000->0x270F)
 // 
-// SIMULATION TIME: ~1.8 ms
+// SIMULATION TIME: ~10 us
 
 `timescale 1 ns/10 ps
 
@@ -13,7 +13,7 @@ module fib_operator_tb;
 
     logic i_clk, i_rst;
     logic i_start;
-    logic [4:0] i_gen_amt;
+    logic [7:0] i_gen_amt;
     logic o_ready, o_done_tick;
     logic [15:0] o_final;
     logic o_overflow;
@@ -43,7 +43,7 @@ module fib_operator_tb;
         // wait some
         repeat(3) @(posedge i_clk);
         
-        for (int i = 5'b00000; i <= 5'b11111; i = i + 1)
+        for (int i = 8'h00; i <= 8'hFF; i = i + 1)
         begin
             wait (o_ready == 1'b1);
             i_gen_amt = i;

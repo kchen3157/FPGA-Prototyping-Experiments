@@ -5,7 +5,7 @@
 //! amount of 20 (F(20) = 6765, F(21) = 10946), to support
 //! a 4 digit BCD conversion.
 //
-// TESTED INPUT(i_gen_amt): 5 Bit Binary 0d00->0d32 (0x00->0x20)
+// TESTED INPUT(i_gen_amt): 8 Bit Binary 0d000->0d255 (0x00->0xFF)
 // TESTED OUTPUT(o_final): 4 Byte Binary 0d0000->0d9999 (0x0000->0x270F)
 
 
@@ -15,7 +15,7 @@ module fib_operator
     (
         input   logic i_clk, i_rst,
         input   logic i_start,
-        input   logic [4:0] i_gen_amt,
+        input   logic [7:0] i_gen_amt,
         output  logic o_ready, o_done_tick,
         output  logic [15:0] o_final,
         output  logic o_overflow
