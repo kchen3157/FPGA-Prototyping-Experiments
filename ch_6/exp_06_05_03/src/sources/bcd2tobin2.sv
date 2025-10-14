@@ -1,27 +1,33 @@
-module bcdtobin
+// This is a BCD (Binary-Coded Decimal) to Binary circuit that is designed for
+// use in the input logic of the Fibonacci generator. Because the output of the
+// generator is limited to 9999, usage in the generator should not surpass 20 (6765).
+//
+// TESTED INPUT: 2 Digit BCD (00->99)
+// TESTED OUTPUT: 2 Byte Binary (0x00->0x63)
+
+`timescale 1 ns/10 ps
+
+module bcd2tobin2
     (
         input   logic i_clk, i_rst,
         input   logic i_start,
-        input   logic [3:0] i_bcd [1:0],
+        input   logic [3:0] i_bcd1, i_bcd0,
+
         output  logic o_ready, o_done,
-        output  logic [11:0] o_bin
+        output  logic [7:0] o_bin
     );
 
     typedef enum {e_idle, e_operation, e_done} t_state;
 
-    t_state r_state, w_state_next;
-    logic [11:0] r_bin, w_bin_next, w_bin_adj;
-    logic [3:0] r_bcd0, w_bcd0_next, w_bcd0_adj;
-    logic [3:0] r_bcd1, w_bcd1_next, w_bcd1_adj;
-    logic [3:0] r_bcd2, w_bcd2_next, w_bcd2_adj;
-    logic [3:0] r_bcd3, w_bcd3_next, w_bcd3_adj;
-    logic [3:0] r_index, w_index_next;
+    t_state r_state, w_state_next;                  // track state
+    logic [7:0] r_bin, w_bin_next, w_bin_adj;       // track bin output
+    logic [3:0] r_bcd0, w_bcd0_next, w_bcd0_adj;    // track bcd0 input
+    logic [3:0] r_bcd1, w_bcd1_next, w_bcd1_adj;    // track bcd1 input
+    logic [3:0] r_index, w_index_next;              // track compute iterations
 
     always_comb
     begin : shifter
-        w_bcd3_adj = {1'b0,         r_bcd3[3:1]};
-        w_bcd2_adj = {r_bcd3[0],    r_bcd2[3:1]};
-        w_bcd1_adj = {r_bcd2[0],    r_bcd1[3:1]};
+        w_bcd1_adj = {1'b0,         r_bcd1[3:1]};
         w_bcd0_adj = {r_bcd1[0],    r_bcd0[3:1]};
     end
 
@@ -33,8 +39,6 @@ module bcdtobin
             r_bin <= 0;
             r_bcd0 <= 0;
             r_bcd1 <= 0;
-            r_bcd2 <= 0;
-            r_bcd3 <= 0;
             r_index <= 0;
         end
         else
@@ -43,8 +47,6 @@ module bcdtobin
             r_bin <= w_bin_next;
             r_bcd0 <= w_bcd0_next;
             r_bcd1 <= w_bcd1_next;
-            r_bcd2 <= w_bcd2_next;
-            r_bcd3 <= w_bcd3_next;
             r_index <= w_index_next;
         end
     end
@@ -56,8 +58,6 @@ module bcdtobin
         w_bin_next = r_bin;
         w_bcd0_next = r_bcd0;
         w_bcd1_next = r_bcd1;
-        w_bcd2_next = r_bcd2;
-        w_bcd3_next = r_bcd3;
         w_index_next = r_index;
 
         o_ready = 1'b0;
@@ -69,26 +69,23 @@ module bcdtobin
                 o_ready = 1'b1;
                 if (i_start)
                 begin
-                    w_bin_next = 12'h000;
-                    w_bcd0_next = i_bcd[0];
-                    w_bcd1_next = i_bcd[1];
-                    w_bcd2_next = i_bcd[2];
-                    w_bcd3_next = i_bcd[3];
-                    w_index_next = 4'hD;
+                    // Load/reset regs
+                    w_bin_next = 8'h00;
+                    w_bcd0_next = i_bcd0;
+                    w_bcd1_next = i_bcd1;
+                    w_index_next = 4'h8; // #/iterations: 8 bits
                     w_state_next = e_operation;
                 end
             end
             e_operation:
             begin
-                if (r_index == 1)
+                if (r_index == 0)
                     w_state_next = e_done;
                 else
                 begin
-                    w_bcd3_next = (w_bcd3_adj > 7) ? (w_bcd3_adj - 3) : w_bcd3_adj;
-                    w_bcd2_next = (w_bcd2_adj > 7) ? (w_bcd2_adj - 3) : w_bcd2_adj;
                     w_bcd1_next = (w_bcd1_adj > 7) ? (w_bcd1_adj - 3) : w_bcd1_adj;
                     w_bcd0_next = (w_bcd0_adj > 7) ? (w_bcd0_adj - 3) : w_bcd0_adj;
-                    w_bin_next = {r_bcd0[0], r_bin[11:1]};
+                    w_bin_next = {r_bcd0[0], r_bin[7:1]};
                     w_index_next = r_index - 1;
                 end
             end
