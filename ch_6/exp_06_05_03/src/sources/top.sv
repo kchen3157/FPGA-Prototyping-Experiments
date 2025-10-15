@@ -7,15 +7,15 @@ module top
         input   logic btn,
         output  logic [1:0] led,
 
-        // vadj
-        output  logic [1:0] set_vadj,
-        output  logic vadj_en,
-
         // FMC sseg out
         output  logic fmc_clk0_m2c_n, fmc_clk1_m2c_n,
         output  logic fmc_la_2n, fmc_la_2p, fmc_la_3p, fmc_la_4p,
                       fmc_la_5n, fmc_la_8n, fmc_la_8p, fmc_la_9n,
                       fmc_la_9p, fmc_la_12p
+
+        // vadj
+        (* DONT_TOUCH = "TRUE" *) output  logic [1:0] set_vadj,
+        (* DONT_TOUCH = "TRUE" *) output  logic vadj_en,
     );
 
     logic [3:0] w_gen_amt_map [1:0];
