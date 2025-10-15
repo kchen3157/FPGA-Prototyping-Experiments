@@ -13,8 +13,8 @@ module fib_ctl_tb;
 
     logic i_clk, i_rst;
     logic i_start;
-    logic [3:0] i_gen_amt_bcd [1:0];
-    logic [3:0] o_final_bcd [3:0];
+    logic [3:0] i_gen_amt_bcd1, i_gen_amt_bcd0;
+    logic [3:0] o_final_bcd3, o_final_bcd2, o_final_bcd1, o_final_bcd0;
     logic o_ready, o_done;
 
     fib_ctl uut_fib_ctl
@@ -33,8 +33,8 @@ module fib_ctl_tb;
         // first reset
         i_rst = 1'b1;
         i_start = 1'b0;
-        i_gen_amt_bcd[0] = 4'h0;
-        i_gen_amt_bcd[1] = 4'h1;
+        i_gen_amt_bcd0 = 4'h0;
+        i_gen_amt_bcd1 = 4'h1;
         @(posedge i_clk);
         i_rst = 1'b0;
         
@@ -47,8 +47,8 @@ module fib_ctl_tb;
             for (int j = 4'h0; j <= 4'h9; j = j + 1)
             begin
                 wait (o_ready == 1'b1);
-                i_gen_amt_bcd[0] = j;
-                i_gen_amt_bcd[1] = i;
+                i_gen_amt_bcd0 = j;
+                i_gen_amt_bcd1 = i;
                 @(posedge i_clk);
                 i_start = 1'b1;
                 @(posedge i_clk);

@@ -14,9 +14,9 @@ module fib_ctl
     (
         input   logic i_clk, i_rst,
         input   logic i_start,
-        input   logic [3:0] i_gen_amt_bcd [1:0],
+        input   logic [3:0] i_gen_amt_bcd1, i_gen_amt_bcd0,
 
-        output  logic [3:0] o_final_bcd [3:0],
+        output  logic [3:0] o_final_bcd3, o_final_bcd2, o_final_bcd1, o_final_bcd0,
         output  logic o_ready, o_done
     );
 
@@ -28,7 +28,7 @@ module fib_ctl
     (
         .i_clk(i_clk), .i_rst(i_rst),
         .i_start(w_bcd2tobin2_start),
-        .i_bcd1(i_gen_amt_bcd[1]), .i_bcd0(i_gen_amt_bcd[0]),
+        .i_bcd1(i_gen_amt_bcd1), .i_bcd0(i_gen_amt_bcd0),
 
         .o_ready(w_bcd2tobin2_ready), .o_done(w_bcd2tobin2_done),
         .o_bin(w_gen_amt_bin)
@@ -54,8 +54,8 @@ module fib_ctl
         .i_start(w_bin4tobcd4_start),
         .i_bin(w_fib_out_bin),
         .o_ready(w_bin4tobcd4_ready), .o_done(w_bin4tobcd4_done),
-        .o_bcd3(o_final_bcd[3]), .o_bcd2(o_final_bcd[2]), 
-        .o_bcd1(o_final_bcd[1]), .o_bcd0(o_final_bcd[0])
+        .o_bcd3(o_final_bcd3), .o_bcd2(o_final_bcd2), 
+        .o_bcd1(o_final_bcd1), .o_bcd0(o_final_bcd0)
     );
 
 
