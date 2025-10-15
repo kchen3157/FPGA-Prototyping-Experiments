@@ -93,6 +93,10 @@ module bcd2tobin2
                 o_done = 1'b1;
                 w_state_next = e_idle;
             end
+            default:
+            begin
+                w_state_next = e_idle;
+            end
         endcase
     end
 

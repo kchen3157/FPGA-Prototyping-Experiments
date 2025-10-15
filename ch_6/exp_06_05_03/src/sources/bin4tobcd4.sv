@@ -26,7 +26,8 @@ module bin4tobcd4
     logic [3:0] r_bcd0, w_bcd0_next, w_bcd0_adj;
     logic [3:0] r_bcd1, w_bcd1_next, w_bcd1_adj;
     logic [3:0] r_bcd2, w_bcd2_next, w_bcd2_adj;
-    logic [3:0] r_bcd3, w_bcd3_next, w_bcd3_adj;
+    logic [3:0] r_bcd3, w_bcd3_next;
+    logic [2:0] w_bcd3_adj;
     logic [3:0] r_index, w_index_next;
 
     always_comb begin : bcd_add4
@@ -105,6 +106,10 @@ module bin4tobcd4
             e_done:
             begin
                 o_done = 1'b1;
+                w_state_next = e_ready;
+            end
+            default:
+            begin
                 w_state_next = e_ready;
             end
         endcase

@@ -43,7 +43,8 @@ module fib_ctl
         .i_gen_amt(w_gen_amt_bin),
 
         .o_ready(w_fib_ready), .o_done_tick(w_fib_done),
-        .o_final(w_fib_out_bin)
+        .o_final(w_fib_out_bin),
+        .o_overflow()
     );
 
     logic w_bin4tobcd4_start, w_bin4tobcd4_ready, w_bin4tobcd4_done;
@@ -110,6 +111,10 @@ module fib_ctl
                     o_done = 1'b1;
                     w_state_next = e_idle;
                 end
+            end
+            default:
+            begin
+                w_state_next = e_idle;
             end
         endcase
     end
