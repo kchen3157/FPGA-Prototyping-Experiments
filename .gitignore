@@ -108,3 +108,5 @@ ipshared
 
 clockInfo.txt
 build/
+waveforms/
+temp_proj_*/
