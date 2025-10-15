@@ -1,1 +1,1 @@
-vivado -mode batch -nolog -nojournal -source build.tcl
+vivado -mode batch -nolog -nojournal -source ./scripts/build.tcl

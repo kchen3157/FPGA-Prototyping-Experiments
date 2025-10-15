@@ -1,10 +1,10 @@
-# read design sources (add one line for each file)
+######## SET DESIGN SOURCES HERE (ONE PER FILE) ########
 read_verilog -sv "src/sources/top.sv"
 
-# read constraints
+######## SET CONSTRAINTS HERE ########
 read_xdc "src/constrs/Nexys-Video-Master.xdc"
 
-# synth
+######## SET PART HERE ########
 synth_design -top "top" -part "xc7a200tsbg484-1"
 
 # place and route
@@ -12,5 +12,5 @@ opt_design
 place_design
 route_design
 
-# write bitstream1
+######## SET FINAL BITSTREAM OUTPUT HERE ########
 write_bitstream -force "build/proj.bit"
