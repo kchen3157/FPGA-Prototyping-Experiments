@@ -3,11 +3,11 @@
 // TESTED INPUT(i_gen_amt_bcd): 2 BCD 00->99
 // TESTED OUTPUT(o_final_bcd): 4 BCD 0000->9999
 // 
-// SIMULATION TIME: ~32 ms
+// SIMULATION TIME: ????
 
 `timescale 1 ns/10 ps
 
-module fib_ctl_tb;
+module fibgen_tb;
 
     localparam CLOCK_T = 10; // 10 ns -> 100 MHz
 
@@ -15,9 +15,9 @@ module fib_ctl_tb;
     logic i_start;
     logic [3:0] i_gen_amt_bcd1, i_gen_amt_bcd0;
     logic [3:0] o_final_bcd3, o_final_bcd2, o_final_bcd1, o_final_bcd0;
-    logic o_ready, o_done;
+    logic o_ready, o_done, o_overflow;
 
-    fib_ctl uut_fib_ctl
+    fibgen uut_fibgen
         (.*);
 
     always // generate clock
