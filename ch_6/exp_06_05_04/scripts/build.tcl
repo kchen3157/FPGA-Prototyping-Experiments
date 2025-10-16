@@ -15,5 +15,7 @@ opt_design
 place_design
 route_design
 
+report_utilization -file utilizationReport.txt
+
 ######## SET FINAL BITSTREAM OUTPUT HERE ########
 write_bitstream -force "build/proj.bit"

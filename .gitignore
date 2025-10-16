@@ -107,6 +107,7 @@ ipshared
 */*_xpr/
 
 clockInfo.txt
+utilizationReport.txt
 build/
 waveforms/
 temp_proj_*/

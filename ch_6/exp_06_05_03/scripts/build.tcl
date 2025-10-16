@@ -18,5 +18,7 @@ opt_design
 place_design
 route_design
 
+report_utilization -file utilizationReport.txt
+
 # write bitstream
 write_bitstream -force "./build/proj.bit"
