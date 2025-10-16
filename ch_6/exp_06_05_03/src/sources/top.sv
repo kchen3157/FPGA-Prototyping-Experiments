@@ -11,21 +11,25 @@ module top
         output  logic fmc_clk0_m2c_n, fmc_clk1_m2c_n,
         output  logic fmc_la_2n, fmc_la_2p, fmc_la_3p, fmc_la_4p,
                       fmc_la_5n, fmc_la_8n, fmc_la_8p, fmc_la_9n,
-                      fmc_la_9p, fmc_la_12p
+                      fmc_la_9p, fmc_la_12p,
 
         // vadj
         (* DONT_TOUCH = "TRUE" *) output  logic [1:0] set_vadj,
-        (* DONT_TOUCH = "TRUE" *) output  logic vadj_en,
+        (* DONT_TOUCH = "TRUE" *) output  logic vadj_en
     );
 
     logic [3:0] w_gen_amt_map [1:0];
     logic [3:0] w_final_map [3:0];
     fib_ctl u_fib_ctl
     (
-        .i_clk(clk), .i_rst(cpu_resetn),
+        .i_clk(clk), .i_rst(~cpu_resetn),
         .i_start(btn),
-        .i_gen_amt_bcd(w_gen_amt_map),
-        .o_final_bcd(w_final_map),
+        .i_gen_amt_bcd0(w_gen_amt_map[0]),
+        .i_gen_amt_bcd1(w_gen_amt_map[1]),
+        .o_final_bcd0(w_final_map[0]),
+        .o_final_bcd1(w_final_map[1]),
+        .o_final_bcd2(w_final_map[2]),
+        .o_final_bcd3(w_final_map[3]),
         .o_ready(led[0]), .o_done(led[1])
     );
 
