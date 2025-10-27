@@ -4,9 +4,9 @@ module div
     (
         input   logic i_clk, i_rst,
         input   logic i_start,
-        input   logic [WIDTH-1:0] i_dividend, i_divisor,
+        input   logic [26:0] i_dividend, i_divisor,
         output  logic o_ready, o_done,
-        output  logic [WIDTH-1:0] o_quotient, o_remain
+        output  logic [26:0] o_quotient, o_remain
     );
 
     typedef enum {e_idle, e_operate, e_last, e_done} t_div_state;
