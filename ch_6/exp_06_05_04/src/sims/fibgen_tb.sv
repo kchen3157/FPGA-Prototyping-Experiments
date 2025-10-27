@@ -3,7 +3,7 @@
 // TESTED INPUT(i_gen_amt_bcd): 2 BCD 00->99
 // TESTED OUTPUT(o_final_bcd): 4 BCD 0000->9999
 // 
-// SIMULATION TIME: ????
+// SIMULATION TIME: ~17.29us
 
 `timescale 1 ns/10 ps
 
