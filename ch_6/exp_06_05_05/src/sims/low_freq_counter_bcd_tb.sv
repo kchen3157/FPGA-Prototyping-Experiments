@@ -87,27 +87,27 @@ module low_freq_counter_bcd_tb;
             @(posedge o_done);
             if (o_freq_dp == 8)
             begin
-                $display("div_tb: Ran %0f period, should be %0f frequency, got %h.%h%h%h",
+                $display("div_tb: Ran %0f period, should be %4.3f frequency, got %h.%h%h%h",
                     period_us, (1_000_000/period_us), o_freq_bcd3, o_freq_bcd2, o_freq_bcd1, o_freq_bcd0);
             end
             else if (o_freq_dp == 4)
             begin
-                $display("div_tb: Ran %0f period, should be %0f frequency, got %h%h.%h%h",
+                $display("div_tb: Ran %0f period, should be %4.3f frequency, got %h%h.%h%h",
                     period_us, (1_000_000/period_us), o_freq_bcd3, o_freq_bcd2, o_freq_bcd1, o_freq_bcd0);
             end
             else if (o_freq_dp == 2)
             begin
-                $display("div_tb: Ran %0f period, should be %0f frequency, got %h%h%h.%h",
+                $display("div_tb: Ran %0f period, should be %4.3f frequency, got %h%h%h.%h",
                     period_us, (1_000_000/period_us), o_freq_bcd3, o_freq_bcd2, o_freq_bcd1, o_freq_bcd0);
             end
             else if (o_freq_dp == 1)
             begin
-                $display("div_tb: Ran %0f period, should be %0f frequency, got %h%h%h%h.",
+                $display("div_tb: Ran %0f period, should be %4.3f frequency, got %h%h%h%h.",
                     period_us, (1_000_000/period_us), o_freq_bcd3, o_freq_bcd2, o_freq_bcd1, o_freq_bcd0);
             end
             else
             begin
-                $display("div_tb: Ran %0f period, should be %0f frequency, got %h%h%h%h",
+                $display("div_tb: Ran %0f period, should be %4.3f frequency, got %h%h%h%h",
                     period_us, (1_000_000/period_us), o_freq_bcd3, o_freq_bcd2, o_freq_bcd1, o_freq_bcd0);
             end
             
@@ -156,9 +156,37 @@ module low_freq_counter_bcd_tb;
         generate_signal(1_000_000.0);
         verify(1_000_000.0); // Frequency Underflow
 
-        repeat(5)
+        // do X.XXX frequencies
+        repeat(2)
         begin
-            int random_period_us = $urandom_range(1, 999_999);
+            int random_period_us = $urandom_range(100_001, 999_999);
+            start_measurement();
+            generate_signal(random_period_us);
+            verify(random_period_us);
+        end
+
+        // do XX.XX frequencies
+        repeat(2)
+        begin
+            int random_period_us = $urandom_range(10_001, 100_000);
+            start_measurement();
+            generate_signal(random_period_us);
+            verify(random_period_us);
+        end
+        
+        // do XXX.X frequencies
+        repeat(2)
+        begin
+            int random_period_us = $urandom_range(1_001, 10_000);
+            start_measurement();
+            generate_signal(random_period_us);
+            verify(random_period_us);
+        end
+
+        // do XXXX. frequencies
+        repeat(2)
+        begin
+            int random_period_us = $urandom_range(101, 1_000);
             start_measurement();
             generate_signal(random_period_us);
             verify(random_period_us);
