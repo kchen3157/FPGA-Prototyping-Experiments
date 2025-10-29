@@ -14,7 +14,6 @@ module bintobcd_tb;
 
     logic o_ready, o_done, o_overflow;
     logic [3:0] o_bcd3, o_bcd2, o_bcd1, o_bcd0;
-    logic [3:0] o_bcd6, o_bcd5, o_bcd4;
     logic [3:0] o_dp;
 
     // ********** DUT Instantiation **********
@@ -81,13 +80,45 @@ module bintobcd_tb;
         start();
 
         @(posedge o_done);
+        set_input(32'd10_000_000); // should overflow
+        start();
+
+        @(posedge o_done);
         set_input(32'hFFFF_FFFF); // should overflow
         start();
 
         @(posedge o_done);
+        // Test bcd of form XXXX.
+        repeat(3)
+        begin
+            real rand_input = $urandom_range(1_000_000, 9_999_999);
+            set_input(rand_input);
+            start();
+            @(posedge o_done);
+        end
+
+        // Test bcd of form XXX.X
+        repeat(3)
+        begin
+            real rand_input = $urandom_range(100_000, 999_999);
+            set_input(rand_input);
+            start();
+            @(posedge o_done);
+        end
+        
+        // Test bcd of form XX.XX
+        repeat(3)
+        begin
+            real rand_input = $urandom_range(10_000, 99_999);
+            set_input(rand_input);
+            start();
+            @(posedge o_done);
+        end
+
+        // Test bcd of form X.XXX
         repeat(5)
         begin
-            real rand_input = $urandom_range(0, 9_999_999.0);
+            real rand_input = $urandom_range(0, 9_999);
             set_input(rand_input);
             start();
             @(posedge o_done);

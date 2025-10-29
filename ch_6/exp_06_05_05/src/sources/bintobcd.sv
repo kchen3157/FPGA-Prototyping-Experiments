@@ -18,11 +18,10 @@ module bintobcd
 
         output  logic o_ready, o_done, o_overflow,
         output  logic [3:0] o_bcd3, o_bcd2, o_bcd1, o_bcd0,
-        output  logic [3:0] o_bcd6, o_bcd5, o_bcd4,
-        output  logic [3:0] o_dp // TODO: Add dp/window logic
+        output  logic [3:0] o_dp
     );
 
-    typedef enum logic [1:0] {e_ready, e_operation, e_done, e_overflow} t_state;
+    typedef enum logic [2:0] {e_ready, e_operation, e_window, e_done, e_overflow} t_state;
     t_state r_state, w_state_next;
 
     logic [31:0] r_bin, w_bin_next;
@@ -36,6 +35,8 @@ module bintobcd
     logic [3:0] r_bcd5, w_bcd5_next, w_bcd5_adj;
     logic [3:0] r_bcd6, w_bcd6_next;
     logic [2:0] w_bcd6_adj;
+
+    logic [3:0] r_dp, w_dp_next;
 
     
 
@@ -61,6 +62,7 @@ module bintobcd
             r_bcd4 <= 0;
             r_bcd5 <= 0;
             r_bcd6 <= 0;
+            r_dp <= 0;
             r_index <= 0;
         end
         else
@@ -74,6 +76,7 @@ module bintobcd
             r_bcd4 <= w_bcd4_next;
             r_bcd5 <= w_bcd5_next;
             r_bcd6 <= w_bcd6_next;
+            r_dp <= w_dp_next;
             r_index <= w_index_next;
         end
     end
@@ -89,6 +92,7 @@ module bintobcd
         w_bcd4_next = r_bcd4;
         w_bcd5_next = r_bcd5;
         w_bcd6_next = r_bcd6;
+        w_dp_next = r_dp;
         w_index_next = r_index;
 
         o_ready = 1'b0;
@@ -110,17 +114,31 @@ module bintobcd
                     w_bcd4_next = 4'h0;
                     w_bcd5_next = 4'h0;
                     w_bcd6_next = 4'h0;
-                    w_index_next = 6'h20; // 32 - 1 bits
+                    w_index_next = 6'h20; // 32 bits
                     w_state_next = e_operation;
+                    if (i_bin > 32'd9_999_999)
+                    begin
+                        w_state_next = e_overflow;
+                        w_bcd6_next = 4'h9;
+                        w_bcd5_next = 4'h9;
+                        w_bcd4_next = 4'h9;
+                        w_bcd3_next = 4'h9;
+                        w_dp_next = 4'b0001;
+                    end
                 end
             end
             e_operation:
             begin
                 if (r_index == 0)
-                    w_state_next = e_done;
-                else if (r_bin > 32'd9_999_999)
-                    w_state_next = e_overflow;
-                else
+                begin
+                    // default (no window shift) dp
+                    w_dp_next = 4'b0001;
+
+                    w_index_next = 6'h03; // three possible shifts in total
+                    
+                    w_state_next = e_window;
+                end
+                else 
                 begin
                     w_bcd6_next = {w_bcd6_adj[2:0], w_bcd5_adj[3]};
                     w_bcd5_next = {w_bcd5_adj[2:0], w_bcd4_adj[3]};
@@ -132,6 +150,37 @@ module bintobcd
                     w_bin_next = (r_bin << 1);
                     w_index_next = r_index - 1;
                 end
+            end
+            e_window:
+            begin
+                // bcd registers    6  5  4  3  <-  2  1  0
+                //
+                // window0          6  5  4  3  <-  2  1  0
+                // window1          5  4  3  2  <-  1  0
+                // window2          4  3  2  1  <-  0
+                // window3          3  2  1  0  <-  
+                //
+                if (r_index == 0) // no more shifts left
+                    w_state_next = e_done;
+                else if (r_bcd6 == 0) // still leading 0, shift
+                begin
+                    w_bcd6_next = r_bcd5;
+                    w_bcd5_next = r_bcd4;
+                    w_bcd4_next = r_bcd3;
+                    w_bcd3_next = r_bcd2;
+                    w_bcd2_next = r_bcd1;
+                    w_bcd1_next = r_bcd0;
+                    w_bcd0_next = 0;
+                    
+                    w_dp_next = (r_dp << 1);
+
+                    w_index_next = r_index - 1;
+                end
+                else // not leading 0 anymore, we're done
+                begin
+                    w_state_next = e_done;
+                end
+                
             end
             e_done:
             begin
@@ -151,12 +200,16 @@ module bintobcd
         endcase
     end
 
-    assign o_bcd0 = r_bcd0;
-    assign o_bcd1 = r_bcd1;
-    assign o_bcd2 = r_bcd2;
-    assign o_bcd3 = r_bcd3;
-    assign o_bcd4 = r_bcd4;
-    assign o_bcd5 = r_bcd5;
-    assign o_bcd6 = r_bcd6;
+    always_comb
+    begin
+        
+    end
+
+    assign o_bcd0 = r_bcd3;
+    assign o_bcd1 = r_bcd4;
+    assign o_bcd2 = r_bcd5;
+    assign o_bcd3 = r_bcd6;
+    assign o_dp = r_dp;
+
 
 endmodule

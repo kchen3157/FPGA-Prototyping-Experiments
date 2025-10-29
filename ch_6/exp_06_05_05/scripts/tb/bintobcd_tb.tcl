@@ -5,7 +5,7 @@
 set MODULE_UNDER_TEST "bintobcd"
 
 ######## SET SIM TIME HERE ########
-set SIM_TIME "10us"
+set SIM_TIME "50us"
 
 ######## SET WAVEFORM OUTPUT DIRECTORY ########
 set WAVEFORM_DIR "waveforms"
