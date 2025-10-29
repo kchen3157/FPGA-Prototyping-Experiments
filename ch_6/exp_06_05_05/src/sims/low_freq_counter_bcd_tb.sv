@@ -85,9 +85,32 @@ module low_freq_counter_bcd_tb;
         int diff;
         begin
             @(posedge o_done);
-
-            $display("div_tb: Ran %0f period, should be %0fE-3 frequency, got %h%h%h%h with decimal %0d",
-               period_us, (1_000_000_000/period_us), o_freq_bcd3, o_freq_bcd2, o_freq_bcd1, o_freq_bcd0, o_freq_dp);
+            if (o_freq_dp == 8)
+            begin
+                $display("div_tb: Ran %0f period, should be %0f frequency, got %h.%h%h%h",
+                    period_us, (1_000_000/period_us), o_freq_bcd3, o_freq_bcd2, o_freq_bcd1, o_freq_bcd0);
+            end
+            else if (o_freq_dp == 4)
+            begin
+                $display("div_tb: Ran %0f period, should be %0f frequency, got %h%h.%h%h",
+                    period_us, (1_000_000/period_us), o_freq_bcd3, o_freq_bcd2, o_freq_bcd1, o_freq_bcd0);
+            end
+            else if (o_freq_dp == 2)
+            begin
+                $display("div_tb: Ran %0f period, should be %0f frequency, got %h%h%h.%h",
+                    period_us, (1_000_000/period_us), o_freq_bcd3, o_freq_bcd2, o_freq_bcd1, o_freq_bcd0);
+            end
+            else if (o_freq_dp == 1)
+            begin
+                $display("div_tb: Ran %0f period, should be %0f frequency, got %h%h%h%h.",
+                    period_us, (1_000_000/period_us), o_freq_bcd3, o_freq_bcd2, o_freq_bcd1, o_freq_bcd0);
+            end
+            else
+            begin
+                $display("div_tb: Ran %0f period, should be %0f frequency, got %h%h%h%h",
+                    period_us, (1_000_000/period_us), o_freq_bcd3, o_freq_bcd2, o_freq_bcd1, o_freq_bcd0);
+            end
+            
 
             wait(o_ready === 1'b1);
         end
