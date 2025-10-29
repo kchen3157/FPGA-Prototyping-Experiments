@@ -12,7 +12,7 @@ module low_freq_counter_bcd
         output  logic [3:0] o_freq_bcd0,
         output  logic [3:0] o_freq_dp,
         
-
+        output  logic o_overflow, o_underflow,
         output  logic o_ready, o_done
     );
 
@@ -73,7 +73,7 @@ module low_freq_counter_bcd
         .o_dp(w_bintobcd_freq_dp)
     );
 
-    typedef enum logic [2:0] { e_idle, e_count_per, e_divide, e_bcdconv, e_done} t_state;
+    typedef enum logic [2:0] { e_idle, e_count_per, e_divide, e_bcdconv, e_overflow, e_underflow, e_done} t_state;
     t_state r_state, w_state_next;
 
     // Output buffer registers
@@ -112,6 +112,8 @@ module low_freq_counter_bcd
         w_state_next = r_state;
         o_ready = 1'b0;
         o_done = 1'b0;
+        o_overflow = 1'b0;
+        o_underflow = 1'b0;
         w_per_counter_start = 1'b0;
         w_div_start = 1'b0;
         w_bintobcd_start = 1'b0;
@@ -138,6 +140,26 @@ module low_freq_counter_bcd
                 begin
                     w_div_start = 1'b1;
                     w_state_next = e_divide;
+                    if (w_per_counter_overflow)
+                    begin
+                        // period overflow is freq underflow
+                        w_freq_bcd3_next = 4'hE;
+                        w_freq_bcd2_next = 4'h0;
+                        w_freq_bcd1_next = 4'h0;
+                        w_freq_bcd0_next = 4'h0;
+                        w_freq_dp_next = 0;
+                        w_state_next = e_underflow;
+                    end
+                    if (w_per_counter_underflow)
+                    begin
+                        // period underflow is freq overflow
+                        w_freq_bcd3_next = 4'hE;
+                        w_freq_bcd2_next = 4'h9;
+                        w_freq_bcd1_next = 4'h9;
+                        w_freq_bcd0_next = 4'h9;
+                        w_freq_dp_next = 0;
+                        w_state_next = e_overflow;
+                    end
                 end
             end
             e_divide:
@@ -158,8 +180,29 @@ module low_freq_counter_bcd
                     w_freq_bcd0_next = w_bintobcd_freq_bcd0;
                     w_freq_dp_next = w_bintobcd_freq_dp;
 
+                    if (w_bintobcd_overflow)
+                    begin
+                        w_freq_bcd3_next = 4'hE;
+                        w_freq_bcd2_next = 4'h9;
+                        w_freq_bcd1_next = 4'h9;
+                        w_freq_bcd0_next = 4'h8;
+                        w_freq_dp_next = 0;
+                        w_state_next = e_overflow;
+                    end
                     w_state_next = e_done;
                 end
+            end
+            e_underflow: // Frequency too low
+            begin
+                o_done = 1'b1;
+                o_overflow = 1'b1;
+                w_state_next = e_idle;
+            end
+            e_overflow: // Frequency too high
+            begin
+                o_done = 1'b1;
+                o_underflow = 1'b1;
+                w_state_next = e_idle;
             end
             e_done:
             begin

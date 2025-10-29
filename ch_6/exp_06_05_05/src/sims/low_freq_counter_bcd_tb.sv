@@ -22,6 +22,7 @@ module low_freq_counter_bcd_tb;
     logic [3:0] o_freq_bcd0;
     logic [3:0] o_freq_dp;
 
+    logic o_overflow, o_underflow;
     logic o_ready, o_done;
 
     // ********** DUT Instantiation **********
@@ -85,7 +86,7 @@ module low_freq_counter_bcd_tb;
         begin
             @(posedge o_done);
 
-            $display("div_tb: Ran %0f period, should be %0f frequency, got %0d%0d%0d%0d with decimal %0d",
+            $display("div_tb: Ran %0f period, should be %0fE-3 frequency, got %h%h%h%h with decimal %0d",
                period_us, (1_000_000_000/period_us), o_freq_bcd3, o_freq_bcd2, o_freq_bcd1, o_freq_bcd0, o_freq_dp);
 
             wait(o_ready === 1'b1);
@@ -96,17 +97,25 @@ module low_freq_counter_bcd_tb;
     begin
         reset();
 
-        // start_measurement();
-        // generate_signal(0.67);
-        // verify(0.67, 1'b1, 1'b0); // Underflow
+        start_measurement();
+        generate_signal(0.67);
+        verify(0.67); // Frequency Overflow
 
         start_measurement();
         generate_signal(1);
-        verify(1);
+        verify(1); // Frequency Overflow
 
         start_measurement();
         generate_signal(1.67);
-        verify(1);
+        verify(1.67); // Frequency Overflow
+
+        start_measurement();
+        generate_signal(100);
+        verify(100); // Frequency Overflow
+
+        start_measurement();
+        generate_signal(101);
+        verify(101);
 
         start_measurement();
         generate_signal(6767.67);
@@ -120,13 +129,13 @@ module low_freq_counter_bcd_tb;
         generate_signal(999_999.0);
         verify(999_999.0);
 
-        // start_measurement();
-        // generate_signal(1_000_000.0);
-        // verify(1_000_000.0, 1'b0, 1'b1); // Overflow
+        start_measurement();
+        generate_signal(1_000_000.0);
+        verify(1_000_000.0); // Frequency Underflow
 
         repeat(5)
         begin
-            real random_period_us = $urandom_range(1.0, 999_999.0);
+            int random_period_us = $urandom_range(1, 999_999);
             start_measurement();
             generate_signal(random_period_us);
             verify(random_period_us);
