@@ -14,15 +14,15 @@ module bintobcd
     (
         input   logic i_clk, i_rst,
         input   logic i_start,
-        input   logic [31:0] i_bin,  // TODO: Display OF when over the 4 digit limit.
+        input   logic [31:0] i_bin,
 
-        output  logic o_ready, o_done,
+        output  logic o_ready, o_done, o_overflow,
         output  logic [3:0] o_bcd3, o_bcd2, o_bcd1, o_bcd0,
         output  logic [3:0] o_bcd6, o_bcd5, o_bcd4,
         output  logic [3:0] o_dp // TODO: Add dp/window logic
     );
 
-    typedef enum logic [1:0] {e_ready, e_operation, e_done} t_state;
+    typedef enum logic [1:0] {e_ready, e_operation, e_done, e_overflow} t_state;
     t_state r_state, w_state_next;
 
     logic [31:0] r_bin, w_bin_next;
@@ -93,6 +93,7 @@ module bintobcd
 
         o_ready = 1'b0;
         o_done = 1'b0;
+        o_overflow = 1'b0;
 
 
         case (r_state)
@@ -117,6 +118,8 @@ module bintobcd
             begin
                 if (r_index == 0)
                     w_state_next = e_done;
+                else if (r_bin > 32'd9_999_999)
+                    w_state_next = e_overflow;
                 else
                 begin
                     w_bcd6_next = {w_bcd6_adj[2:0], w_bcd5_adj[3]};
@@ -133,6 +136,12 @@ module bintobcd
             e_done:
             begin
                 o_done = 1'b1;
+                w_state_next = e_ready;
+            end
+            e_overflow:
+            begin
+                o_done = 1'b1;
+                o_overflow = 1'b1;
                 w_state_next = e_ready;
             end
             default:

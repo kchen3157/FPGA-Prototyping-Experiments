@@ -12,7 +12,7 @@ module bintobcd_tb;
     logic i_start;
     logic [31:0] i_bin;
 
-    logic o_ready, o_done;
+    logic o_ready, o_done, o_overflow;
     logic [3:0] o_bcd3, o_bcd2, o_bcd1, o_bcd0;
     logic [3:0] o_bcd6, o_bcd5, o_bcd4;
     logic [3:0] o_dp;
@@ -74,6 +74,14 @@ module bintobcd_tb;
 
         @(posedge o_done);
         set_input(32'd7676767);
+        start();
+
+        @(posedge o_done);
+        set_input(32'd67676767); // should overflow
+        start();
+
+        @(posedge o_done);
+        set_input(32'hFFFF_FFFF); // should overflow
         start();
 
         @(posedge o_done);
