@@ -31,6 +31,11 @@ add_files -fileset sources_1 "src/sources/bintobcd.sv"
 set_property top ${MODULE_UNDER_TEST}_tb [get_filesets sim_1]
 set_property top_lib xil_defaultlib [get_filesets sim_1]
 
+# Set simulation random seed
+set systemTime [clock seconds]
+set options "-sv_seed $systemTime"
+set_property -name {xsim.simulate.xsim.more_options} -value $options -objects [get_filesets sim_1]
+
 launch_simulation
 
 # Save space by not writing vcd
@@ -42,4 +47,4 @@ restart
 run ${SIM_TIME}
 
 # Close VCD and exit
-close_vcd
+# close_vcd

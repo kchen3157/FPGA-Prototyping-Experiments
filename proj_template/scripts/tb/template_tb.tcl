@@ -28,6 +28,12 @@ add_files -fileset sources_1 "src/sources/${MODULE_UNDER_TEST}.sv"
 set_property top ${MODULE_UNDER_TEST}_tb [get_filesets sim_1]
 set_property top_lib xil_defaultlib [get_filesets sim_1]
 
+# Set simulation random seed
+# set systemTime [clock seconds]
+# set options "-sv_seed $systemTime"
+# set_property -name {xsim.simulate.xsim.more_options} -value $options -objects [get_filesets sim_1]
+
+
 launch_simulation
 
 open_vcd ../../../../../${WAVEFORM_DIR}/${TIMESTAMP}_${MODULE_UNDER_TEST}_tb.vcd
