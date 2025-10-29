@@ -59,6 +59,8 @@ module low_freq_counter_bcd
     logic w_bintobcd_start;
     logic w_bintobcd_done;
     logic w_bintobcd_overflow;
+    logic [3:0] w_bintobcd_freq_bcd3, w_bintobcd_freq_bcd2, w_bintobcd_freq_bcd1, w_bintobcd_freq_bcd0;
+    logic [3:0] w_bintobcd_freq_dp;
     bintobcd u_bintobcd
     (
         .i_clk(i_clk), .i_rst(i_rst),
@@ -66,12 +68,20 @@ module low_freq_counter_bcd
         .i_bin(w_freq_bin),
 
         .o_ready(), .o_done(w_bintobcd_done), .o_overflow(w_bintobcd_overflow),
-        .o_bcd3(o_freq_bcd3), .o_bcd2(o_freq_bcd2), .o_bcd1(o_freq_bcd1), .o_bcd0(o_freq_bcd0),
-        .o_dp(o_freq_dp)
+        .o_bcd3(w_bintobcd_freq_bcd3), .o_bcd2(w_bintobcd_freq_bcd2),
+        .o_bcd1(w_bintobcd_freq_bcd1), .o_bcd0(w_bintobcd_freq_bcd0),
+        .o_dp(w_bintobcd_freq_dp)
     );
 
-    typedef enum logic [1:0] { e_idle, e_count_per, e_divide, e_bcdconv } t_state;
+    typedef enum logic [2:0] { e_idle, e_count_per, e_divide, e_bcdconv, e_done} t_state;
     t_state r_state, w_state_next;
+
+    // Output buffer registers
+    logic [3:0] r_freq_bcd3, w_freq_bcd3_next;
+    logic [3:0] r_freq_bcd2, w_freq_bcd2_next;
+    logic [3:0] r_freq_bcd1, w_freq_bcd1_next;
+    logic [3:0] r_freq_bcd0, w_freq_bcd0_next;
+    logic [3:0] r_freq_dp, w_freq_dp_next;
 
     // Instantiate registers
     always_ff @( posedge i_clk, posedge i_rst )
@@ -79,10 +89,20 @@ module low_freq_counter_bcd
         if (i_rst)
         begin
             r_state <= e_idle;
+            r_freq_bcd3 <= 4'h0;
+            r_freq_bcd2 <= 4'h0;
+            r_freq_bcd1 <= 4'h0;
+            r_freq_bcd0 <= 4'h0;
+            r_freq_dp <= 4'h0;
         end
         else
         begin
             r_state <= w_state_next;
+            r_freq_bcd3 <= w_freq_bcd3_next;
+            r_freq_bcd2 <= w_freq_bcd2_next;
+            r_freq_bcd1 <= w_freq_bcd1_next;
+            r_freq_bcd0 <= w_freq_bcd0_next;
+            r_freq_dp <= w_freq_dp_next;
         end
     end
 
@@ -95,6 +115,12 @@ module low_freq_counter_bcd
         w_per_counter_start = 1'b0;
         w_div_start = 1'b0;
         w_bintobcd_start = 1'b0;
+
+        w_freq_bcd3_next = r_freq_bcd3;
+        w_freq_bcd2_next = r_freq_bcd2;
+        w_freq_bcd1_next = r_freq_bcd1;
+        w_freq_bcd0_next = r_freq_bcd0;
+        w_freq_dp_next = r_freq_dp;
 
         case (r_state)
             e_idle:
@@ -126,13 +152,29 @@ module low_freq_counter_bcd
             begin
                 if (w_bintobcd_done)
                 begin
-                    o_done = 1'b1;
-                    w_state_next = e_idle;
+                    w_freq_bcd3_next = w_bintobcd_freq_bcd3;
+                    w_freq_bcd2_next = w_bintobcd_freq_bcd2;
+                    w_freq_bcd1_next = w_bintobcd_freq_bcd1;
+                    w_freq_bcd0_next = w_bintobcd_freq_bcd0;
+                    w_freq_dp_next = w_bintobcd_freq_dp;
+
+                    w_state_next = e_done;
                 end
+            end
+            e_done:
+            begin
+                o_done = 1'b1;
+                w_state_next = e_idle;
             end
             default: w_state_next = e_idle;
         endcase
     end
+
+    assign o_freq_bcd3 = r_freq_bcd3;
+    assign o_freq_bcd2 = r_freq_bcd2;
+    assign o_freq_bcd1 = r_freq_bcd1;
+    assign o_freq_bcd0 = r_freq_bcd0;
+    assign o_freq_dp = r_freq_dp;
 
 
 endmodule
