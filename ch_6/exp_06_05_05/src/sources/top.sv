@@ -7,8 +7,8 @@ module top
         output  logic [1:0] led,
 
         // SIGNAL IN
-        // input   logic [0:0] ja,
-        input   logic btnu,
+        input   logic [0:0] ja,
+        // input   logic btnu,
 
         // FMC sseg out
         output  logic fmc_clk0_m2c_n, fmc_clk1_m2c_n,
@@ -48,8 +48,8 @@ module top
         .i_clk(clk), .i_rst(~cpu_resetn),
         .i_start(btnc_db), 
         
-        // .i_signal(ja[0]),
-        .i_signal(btnu_db),
+        .i_signal(ja[0]),
+        // .i_signal(btnu_db),
 
         .o_freq_bcd3(w_frequency_map[3]),
         .o_freq_bcd2(w_frequency_map[2]),
