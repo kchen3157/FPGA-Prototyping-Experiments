@@ -64,7 +64,7 @@ module rand_gen_tb;
     );
         int unsigned cycle_count;
     begin
-        $display("[%0t] Testing (seed=%h, lower=%0d, upper=%0d, expect_invalid=%0b)",
+        $display("Info: [%0t] Testing (seed=%h, lower=%0d, upper=%0d, expect_invalid=%0b)",
                  $time, seed, lower, upper, expect_invalid);
 
         wait_ready();
@@ -77,13 +77,14 @@ module rand_gen_tb;
         i_generate = 1'b1;
         @(posedge i_clk)
         i_generate = 1'b0;
+        @(posedge i_clk)
 
         // Check if invalid (should be asserted one clk cycle later if invalid)
         if (expect_invalid)
         begin
             if (o_invalid !== 1'b1)
             begin
-                $error("[%0t] o_invalid did no assert with invalid input", $time);
+                $error("[%0t] o_invalid did not assert with invalid input", $time);
             end
             return;
         end
@@ -91,30 +92,31 @@ module rand_gen_tb;
         begin
             if (o_invalid == 1'b1)
             begin
-                $error("[%0t] o_invalid did no assert with invalid input", $time);
+                $error("[%0t] o_invalid did not assert with invalid input", $time);
             end
         end
 
         // Valid and invalid deasserted, let's wait for o_done assertion.
         cycle_count = 0;
-        @(posedge i_clk);
-        if (o_ready == 1'b0)
+        while (o_done == 1'b0 && cycle_count < 1000)
         begin
-            while (o_ready == 1'b0 && o_done == 1'b0 && cycle_count < 1000)
-            begin
-                @(posedge i_clk);
-                cycle_count++;
-            end
-            if (cycle_count >= 1000)
-            begin
-                $error("[%0t] timeout, o_ready/o_done did not reassert", $time);
-            end
+            @(posedge i_clk);
+            cycle_count++;
+        end
+        if (cycle_count >= 1000)
+        begin
+            $error("[%0t] timeout, o_ready/o_done did not reassert", $time);
+            return;
         end
 
         // Now verify the values
         if (o_val < lower || o_val > upper)
         begin
             $error("[%0t] o_val=%0d out of range [%0d, %0d]", $time, o_val, lower, upper);
+        end
+        else
+        begin
+            $display("Info: [%0t] got o_val=%0d in range [%0d, %0d]", $time, o_val, lower, upper);
         end
 
     end
@@ -127,9 +129,9 @@ module rand_gen_tb;
         do_rand_transaction(32'h0000_0001, 32'd0, 32'd9, 0);
         do_rand_transaction(32'hDEAD_BEEF, 32'd10, 32'd100, 0);
 
-        do_rand_transaction(32'h2349_3219, 32'd42, 32'd42, 0);
+        do_rand_transaction(32'h2349_3219, 32'd42, 32'd42, 1);
 
-        do_rand_transaction(32'h2839_1482, 32'd10, 32'd5, 0);
+        do_rand_transaction(32'h2839_1482, 32'd10, 32'd5, 1);
     
         for (int i = 0; i < 20; i++)
         begin
