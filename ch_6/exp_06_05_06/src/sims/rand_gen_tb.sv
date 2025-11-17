@@ -64,7 +64,7 @@ module rand_gen_tb;
     );
         int unsigned cycle_count;
     begin
-        $display("Info: [%0t] Testing (seed=%h, lower=%0d, upper=%0d, expect_invalid=%0b)",
+        $display("\tInfo: [%0t] Testing (seed=%h, lower=%0d, upper=%0d, expect_invalid=%0b)",
                  $time, seed, lower, upper, expect_invalid);
 
         wait_ready();
@@ -84,7 +84,7 @@ module rand_gen_tb;
         begin
             if (o_invalid !== 1'b1)
             begin
-                $error("[%0t] o_invalid did not assert with invalid input", $time);
+                $error("\t[%0t] o_invalid did not assert with invalid input", $time);
             end
             return;
         end
@@ -92,7 +92,7 @@ module rand_gen_tb;
         begin
             if (o_invalid == 1'b1)
             begin
-                $error("[%0t] o_invalid did not assert with invalid input", $time);
+                $error("\t[%0t] o_invalid did not assert with invalid input", $time);
             end
         end
 
@@ -105,18 +105,22 @@ module rand_gen_tb;
         end
         if (cycle_count >= 1000)
         begin
-            $error("[%0t] timeout, o_ready/o_done did not reassert", $time);
+            $error("\t[%0t] timeout, o_ready/o_done did not reassert", $time);
             return;
         end
 
         // Now verify the values
-        if (o_val < lower || o_val > upper)
+        if ($isunknown(o_val))
         begin
-            $error("[%0t] o_val=%0d out of range [%0d, %0d]", $time, o_val, lower, upper);
+            $error("\t[%0t] o_val=%0d nonbinary expression detected", $time, o_val);
+        end
+        else if (o_val < lower || o_val > upper)
+        begin
+            $error("\t[%0t] o_val=%0d out of range [%0d, %0d]", $time, o_val, lower, upper);
         end
         else
         begin
-            $display("Info: [%0t] got o_val=%0d in range [%0d, %0d]", $time, o_val, lower, upper);
+            $display("\tInfo: [%0t] got o_val=%0d in range [%0d, %0d]", $time, o_val, lower, upper);
         end
 
     end
@@ -126,14 +130,16 @@ module rand_gen_tb;
     begin
         reset();
 
+        $display("Info: Beginning constant tests");
         do_rand_transaction(32'h0000_0001, 32'd0, 32'd9, 0);
+
         do_rand_transaction(32'hDEAD_BEEF, 32'd10, 32'd100, 0);
 
         do_rand_transaction(32'h2349_3219, 32'd42, 32'd42, 1);
 
         do_rand_transaction(32'h2839_1482, 32'd10, 32'd5, 1);
     
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 10; i++)
         begin
             logic [31:0] lower;
             logic [31:0] upper;
@@ -142,9 +148,25 @@ module rand_gen_tb;
             seed = $urandom();
             lower = $urandom_range(0, 1000);
             upper = lower + $urandom_range(1, 1000);
-
-            do_rand_transaction(seed, lower, upper, 0);
+            $display("Info: [%0t] RANDOM TEST (seed=%h, lower=%0d, upper=%0d)",
+                 $time, seed, lower, upper);
+            for (int i = 0; i < 3; i++)
+            begin
+                do_rand_transaction(seed, lower, upper, 0);
+            end
         end
+
+        // test for reaction timer usecase, between 2000 and 15000 ms
+        begin
+            logic [31:0] seed;
+            seed = $urandom();
+            $display("Info: [%0t] CONSTANT TEST (seed=%0d, lower=2000, upper=15000)", $time, seed);
+            for (int i = 0; i < 20; i++)
+            begin
+                do_rand_transaction(seed, 2000, 15000, 0);
+            end
+        end
+
         
         // wait some more
         repeat(3) @(posedge i_clk);

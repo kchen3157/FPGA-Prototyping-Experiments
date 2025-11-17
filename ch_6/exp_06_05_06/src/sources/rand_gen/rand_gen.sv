@@ -19,14 +19,14 @@ module rand_gen
         output  logic [31:0] o_val
     );
 
-    typedef enum { e_ready, e_lfsr_setup0, e_lfsr_setup1, e_lfsr, e_div, e_done } t_state;
-    logic r_state, w_state_next;
+    typedef enum { e_ready, e_lfsr_setup, e_lfsr, e_div, e_done } t_state;
+    t_state r_state, w_state_next;
     logic [31:0] r_seed, w_seed_next;
     logic [31:0] r_upper, w_upper_next;
     logic [31:0] r_lower, w_lower_next;
     logic [31:0] r_val_unshifted, w_val_unshifted_next;
     
-    logic w_range;
+    logic [31:0] w_range;
     assign w_range = r_upper - r_lower;
 
 
@@ -103,11 +103,11 @@ module rand_gen
                     w_upper_next = i_upper;
                     w_lower_next = i_lower;
 
-                    w_state_next = (w_seed_next == r_seed) ? e_lfsr_setup1 : e_lfsr_setup0;
+                    w_state_next = (w_seed_next == r_seed) ? e_lfsr : e_lfsr_setup;
                     w_lfsr32_en = (w_seed_next == r_seed) ? 1'b1 : 1'b0;
                 end
             end
-            e_lfsr_setup0:
+            e_lfsr_setup:
             begin
                 if (r_lower >= r_upper)
                 begin
@@ -115,10 +115,6 @@ module rand_gen
                     w_state_next = e_ready;
                 end
                 w_lfsr32_load_seed = 1'b1;
-                w_state_next = e_lfsr_setup1;
-            end
-            e_lfsr_setup1:
-            begin
                 w_lfsr32_en = 1'b1;
                 w_state_next = e_lfsr;
             end
@@ -145,7 +141,7 @@ module rand_gen
                     w_upper_next = i_upper;
                     w_lower_next = i_lower;
 
-                    w_state_next = (w_seed_next == r_seed) ? e_lfsr_setup1 : e_lfsr_setup0;
+                    w_state_next = (w_seed_next == r_seed) ? e_lfsr : e_lfsr_setup;
                     w_lfsr32_en = (w_seed_next == r_seed) ? 1'b1 : 1'b0;
                 end
             end
