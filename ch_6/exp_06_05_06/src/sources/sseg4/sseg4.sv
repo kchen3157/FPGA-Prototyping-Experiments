@@ -7,8 +7,8 @@ module sseg4
         input   logic [$clog2(9999)-1:0] i_bin,
         input   logic i_greeting,               // When asserted, display "HI"
 
-        output  logic [3:0] o_bcd3, o_bcd2, o_bcd1, o_bcd0,
-        // output  logic [7:0] o_sseg_n,
+        output  logic [7:0] o_sseg_n,
+        output  logic [3:0] o_ldsel,
         output  logic o_idle                    // For siulation usage
     );
 
@@ -33,6 +33,42 @@ module sseg4
         .i_bin(r_bin),
         .o_ready(w_bintobcd_ready), .o_done(w_bintobcd_done),
         .o_bcd3(w_bcd3), .o_bcd2(w_bcd2), .o_bcd1(w_bcd1), .o_bcd0(w_bcd0)
+    );
+
+    logic [7:0] w_sseg_0_n, w_sseg_1_n, w_sseg_2_n, w_sseg_3_n;
+    hextosseg u_hextosseg_0
+    (
+        .i_hex(r_bcd0), .i_dp(1'b0), .o_sseg_n(w_sseg_0_n)
+    );
+
+    hextosseg u_hextosseg_1
+    (
+        .i_hex(r_bcd1), .i_dp(1'b0), .o_sseg_n(w_sseg_1_n)
+    );
+
+    hextosseg u_hextosseg_2
+    (
+        .i_hex(r_bcd2), .i_dp(1'b0), .o_sseg_n(w_sseg_2_n)
+    );
+
+    hextosseg u_hextosseg_3
+    (
+        .i_hex(r_bcd3), .i_dp(1'b0), .o_sseg_n(w_sseg_3_n)
+    );
+
+    logic [7:0] w_in_0, w_in_1, w_in_2, w_in_3;
+    assign w_in_0 = (i_greeting) ? 8'b11111001 : w_sseg_0_n; // HI: 'I'
+    assign w_in_1 = (i_greeting) ? 8'b10001001 : w_sseg_1_n; // HI: 'H'
+    assign w_in_2 = (i_greeting) ? 8'b00000000 : w_sseg_2_n;
+    assign w_in_3 = (i_greeting) ? 8'b00000000 : w_sseg_3_n;
+
+
+    ledmux u_ledmux
+    (
+        .i_clk(i_clk), .i_reset(i_rst),
+        .i_in_n({w_in_3, w_in_2, w_in_1, w_in_0}), // ACTIVE LO
+        .o_ldsel(o_ldsel), // ACTIVE HI
+        .o_sseg_n(o_sseg_n)  // ACTIVE LO
     );
 
     always_ff @(posedge i_clk, posedge i_rst)
@@ -98,10 +134,5 @@ module sseg4
             end
         endcase
     end
-
-    assign o_bcd0 = r_bcd0;
-    assign o_bcd1 = r_bcd1;
-    assign o_bcd2 = r_bcd2;
-    assign o_bcd3 = r_bcd3;
 
 endmodule

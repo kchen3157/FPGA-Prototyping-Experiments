@@ -1,6 +1,6 @@
 
 
-module led_4_1_mux
+module ledmux
     #(parameter SLOW_CLK_N = 15) // 100 MHz / 2^15 ~= 3.1 kHz
     (
         input   logic i_clk, i_reset,

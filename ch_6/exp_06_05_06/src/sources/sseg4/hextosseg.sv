@@ -1,5 +1,5 @@
 
-module hex_to_sseg
+module hextosseg
     (
         input   logic [3:0] i_hex,
         input   logic i_dp,
