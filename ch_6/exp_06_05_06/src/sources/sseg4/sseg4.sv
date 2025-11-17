@@ -59,8 +59,8 @@ module sseg4
     logic [7:0] w_in_0, w_in_1, w_in_2, w_in_3;
     assign w_in_0 = (i_greeting) ? 8'b11111001 : w_sseg_0_n; // HI: 'I'
     assign w_in_1 = (i_greeting) ? 8'b10001001 : w_sseg_1_n; // HI: 'H'
-    assign w_in_2 = (i_greeting) ? 8'b00000000 : w_sseg_2_n;
-    assign w_in_3 = (i_greeting) ? 8'b00000000 : w_sseg_3_n;
+    assign w_in_2 = (i_greeting) ? 8'b11111111 : w_sseg_2_n;
+    assign w_in_3 = (i_greeting) ? 8'b11111111 : w_sseg_3_n;
 
 
     ledmux u_ledmux
