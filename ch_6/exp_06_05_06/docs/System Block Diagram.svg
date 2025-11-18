@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xl="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="-468 -353 1157 782" width="1157" height="782">
+  <defs>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="FilledArrow_Marker" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-9 -4 10 8" markerWidth="10" markerHeight="8" color="black">
+      <g>
+        <path d="M -8 0 L 0 3 L 0 -3 Z" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="FilledArrow_Marker_2" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-1 -4 10 8" markerWidth="10" markerHeight="8" color="black">
+      <g>
+        <path d="M 8 0 L 0 -3 L 0 3 Z" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+  </defs>
+  <g id="System_Block_Diagram" fill="none" stroke="none" stroke-opacity="1" stroke-dasharray="none" fill-opacity="1">
+    <title>System Block Diagram</title>
+    <rect fill="white" x="-468" y="-353" width="1157" height="782"/>
+    <g id="System_Block_Diagram_Layer_1">
+      <title>Layer 1</title>
+      <g id="Graphic_41">
+        <path d="M -343 -262.5 L 567.5 -262.5 L 567.5 350 L -343 350 Z" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4.0,4.0" stroke-width="1"/>
+        <text transform="translate(-338 -257.5)" fill="black">
+          <tspan font-family="Menlo" font-size="16" fill="black" x="0" y="15" xml:space="preserve">top.sv</tspan>
+        </text>
+      </g>
+      <g id="Graphic_40">
+        <path d="M -13 -211 L 522.5 -211 L 522.5 146.5 L -13 146.5 Z" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4.0,4.0" stroke-width="1"/>
+        <text transform="translate(-8 -206)" fill="black">
+          <tspan font-family="Menlo" font-size="16" fill="black" x="0" y="15" xml:space="preserve">reaction.sv</tspan>
+        </text>
+      </g>
+      <g id="Group_9">
+        <title>FSM</title>
+        <g id="Graphic_11">
+          <rect x="57.70721" y="-162.04297" width="113.29279" height="279.54297" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8348624"/>
+          <text transform="translate(62.70721 -41.271484)" fill="black">
+            <tspan font-family="Menlo" font-size="16" fill="black" x="13.115147" y="15" xml:space="preserve">main ctl </tspan>
+            <tspan font-family="Menlo" font-size="16" fill="black" x="37.19718" y="34" xml:space="preserve">FSM</tspan>
+          </text>
+        </g>
+        <g id="Graphic_10">
+          <title>Triangle to Right</title>
+          <path d="M 57.70721 79.5 L 74.00108 88.39906 L 57.70721 97.29812 Z" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8348624"/>
+        </g>
+      </g>
+      <g id="Group_12">
+        <title>rand_num_gen</title>
+        <g id="Graphic_14">
+          <rect x="261.02752" y="-130.8789" width="204.47248" height="189.8789" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8348624"/>
+          <text transform="translate(266.02752 -45.439453)" fill="black">
+            <tspan font-family="Menlo" font-size="16" fill="black" x="24.990143" y="15" xml:space="preserve">rand_num_gen.sv</tspan>
+          </text>
+        </g>
+        <g id="Graphic_13">
+          <title>Triangle to Right</title>
+          <path d="M 261.02752 18.933809 L 279.5 34.611884 L 261.02752 50.28996 Z" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8348624"/>
+        </g>
+        <g id="Graphic_20">
+          <text transform="translate(266.02752 -88.73985)" fill="black">
+            <tspan font-family="Menlo" font-size="16" fill="black" x="0" y="15" xml:space="preserve">done</tspan>
+          </text>
+        </g>
+        <g id="Graphic_19">
+          <text transform="translate(266.02752 -114.94191)" fill="black">
+            <tspan font-family="Menlo" font-size="16" fill="black" x="0" y="15" xml:space="preserve">gen</tspan>
+          </text>
+        </g>
+      </g>
+      <g id="Group_15">
+        <title>disp</title>
+        <g id="Graphic_17">
+          <rect x="261.02752" y="186.8164" width="204.47248" height="122" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8348624"/>
+          <text transform="translate(266.02752 238.3164)" fill="black">
+            <tspan font-family="Menlo" font-size="16" fill="black" x="58.70499" y="15" xml:space="preserve">sseg4.sv</tspan>
+          </text>
+        </g>
+        <g id="Graphic_16">
+          <title>Triangle to Right</title>
+          <path d="M 261.02752 283.0733 L 279.5 293.14668 L 261.02752 303.22008 Z" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8348624"/>
+        </g>
+      </g>
+      <g id="Line_23">
+        <path d="M 251.1276 -105.54754 L 171 -105.83594 L 171.76172 -103.83203" marker-start="url(#FilledArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_24">
+        <line x1="180.89995" y1="-78.91374" x2="261.02752" y2="-79.16404" marker-start="url(#FilledArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_38">
+        <line x1="180.9" y1="-56.218085" x2="261.02752" y2="-56.117856" marker-start="url(#FilledArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_37">
+        <text transform="translate(266.02752 -65.5875)" fill="black">
+          <tspan font-family="Menlo" font-size="16" fill="black" x="0" y="15" xml:space="preserve">num</tspan>
+        </text>
+      </g>
+      <g id="Line_39">
+        <path d="M 171.91743 -22.271484 L 223.2539 -22.271484 L 223.2539 247.8164 L 250.2101 247.8164" marker-end="url(#FilledArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Group_42">
+        <title>disp</title>
+        <g id="Graphic_44">
+          <rect x="-289.8643" y="-199.124" width="204.47248" height="122" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8348624"/>
+          <text transform="translate(-284.8643 -147.624)" fill="black">
+            <tspan font-family="Menlo" font-size="16" fill="black" x="44.25577" y="15" xml:space="preserve">debounce.sv</tspan>
+          </text>
+        </g>
+        <g id="Graphic_43">
+          <title>Triangle to Right</title>
+          <path d="M -289.8643 -102.86712 L -271.3918 -92.79372 L -289.8643 -82.72033 Z" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8348624"/>
+        </g>
+      </g>
+      <g id="Group_45">
+        <title>disp</title>
+        <g id="Graphic_47">
+          <rect x="-289.8643" y="123.61026" width="204.47248" height="122" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8348624"/>
+          <text transform="translate(-284.8643 175.11026)" fill="black">
+            <tspan font-family="Menlo" font-size="16" fill="black" x="44.25577" y="15" xml:space="preserve">debounce.sv</tspan>
+          </text>
+        </g>
+        <g id="Graphic_46">
+          <title>Triangle to Right</title>
+          <path d="M -289.8643 219.86714 L -271.3918 229.94053 L -289.8643 240.01393 Z" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8348624"/>
+        </g>
+      </g>
+      <g id="Group_48">
+        <title>disp</title>
+        <g id="Graphic_50">
+          <rect x="-289.8643" y="-49.256695" width="204.47248" height="122" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8348624"/>
+          <text transform="translate(-284.8643 2.2433045)" fill="black">
+            <tspan font-family="Menlo" font-size="16" fill="black" x="44.25577" y="15" xml:space="preserve">debounce.sv</tspan>
+          </text>
+        </g>
+        <g id="Graphic_49">
+          <title>Triangle to Right</title>
+          <path d="M -289.8643 47.000185 L -271.3918 57.07358 L -289.8643 67.146974 Z" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8348624"/>
+        </g>
+      </g>
+      <g id="Line_51">
+        <path d="M -84.47438 -138.124 L -40.78018 -138.124 L -40.78018 -22.271484 L 46.88978 -22.271484" marker-end="url(#FilledArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_52">
+        <path d="M -84.47438 11.743305 L -40.73202 11.743305 L -40.73202 -22.271484 L 46.88978 -22.271484" marker-end="url(#FilledArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_60">
+        <path d="M -85.39182 184.61026 L -40.88185 184.61026 L -40.88185 -22.271484 L 46.88978 -22.271484" marker-end="url(#FilledArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_61">
+        <path d="M -416 -136 L -416 -138.124 L -300.68172 -138.124" marker-end="url(#FilledArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_63">
+        <rect x="-418.99307" y="-152.348" width="41.712" height="28.447998" fill="white"/>
+        <text transform="translate(-413.99307 -147.348)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" fill="black" x="0" y="15" xml:space="preserve">stop</tspan>
+        </text>
+      </g>
+      <g id="Line_68">
+        <path d="M -395.88608 11.392405 L -395.88608 11.743305 L -300.68172 11.743305" marker-end="url(#FilledArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_69">
+        <path d="M -402.53165 183.5443 L -402.53165 184.61026 L -299.7643 184.61026" marker-end="url(#FilledArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_70">
+        <rect x="-424.249" y="-2.4806945" width="42" height="28.447998" fill="white"/>
+        <text transform="translate(-419.249 2.5193055)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" fill="black" x="0" y="15" xml:space="preserve">start</tspan>
+        </text>
+      </g>
+      <g id="Graphic_71">
+        <rect x="-424.249" y="170.38626" width="44.656" height="28.447998" fill="white"/>
+        <text transform="translate(-419.249 175.38626)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" fill="black" x="0" y="15" xml:space="preserve">clear</tspan>
+        </text>
+      </g>
+      <g id="Graphic_73">
+        <path d="M -467 -352 L 688 -352 L 688 428 L -467 428 Z" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4.0,4.0" stroke-width="1"/>
+      </g>
+    </g>
+  </g>
+</svg>
