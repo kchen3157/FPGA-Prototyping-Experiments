@@ -13,6 +13,7 @@ module reaction_tb;
     // Shorten simulation wait time 
     localparam SIM_UPPER_WAIT_MS = 15;
     localparam SIM_LOWER_WAIT_MS = 2;
+    localparam SIM_MAX_REACT_TIME_MS = 50;
 
     // ********** UUT IO **********
     logic i_clk, i_rst;
@@ -25,7 +26,10 @@ module reaction_tb;
 
     // ********** DUT Instantiation **********
     reaction 
-        #(.UPPER_WAIT_MS(SIM_UPPER_WAIT_MS), .LOWER_WAIT_MS(SIM_LOWER_WAIT_MS))
+        #(.UPPER_WAIT_MS(SIM_UPPER_WAIT_MS), 
+          .LOWER_WAIT_MS(SIM_LOWER_WAIT_MS),
+          .MAX_REACT_TIME_MS(SIM_MAX_REACT_TIME_MS)
+          )
         dut_reaction (.*);
 
     // ********** Clockgen **********
@@ -51,10 +55,10 @@ module reaction_tb;
 
     task automatic wait_ms(input int ms);
         int j;
+        $display("Info: Waiting %0d ms", ms);
         for (j = 0; j < ms; j++) begin
             repeat (CYCLES_PER_MS) @(posedge i_clk);
         end
-        $display("Info: Waiting %0d ms", ms);
     endtask
 
     task automatic start();
@@ -104,23 +108,32 @@ module reaction_tb;
         $display("Info: Got LED on");
         wait_ms(2);
         stop();
+        repeat(10) @(posedge i_clk);
         $display("Result: display_val = %0d ms", o_display_val);
+        repeat(10) @(posedge i_clk);
+        clear();
 
         // Check premature reaction
         $display("Info: Start premature reaction test");
         start();
-        wait_ms(10);
+        wait_ms(1);
         stop();
+        repeat(10) @(posedge i_clk);
         $display("Result: display_val = %0d ms", o_display_val);
+        repeat(10) @(posedge i_clk);
+        clear();
 
         // Check none reaction (> 1000 ms)
         $display("Info: Start none reaction test");
         start();
         @(posedge o_led);
         $display("Info: Got LED on");
-        wait_ms(1001);
+        wait_ms(55);
         stop();
+        repeat(10) @(posedge i_clk);
         $display("Result: display_val = %0d ms", o_display_val);
+        repeat(10) @(posedge i_clk);
+        clear();
         
         // wait some more
         repeat(3) @(posedge i_clk);

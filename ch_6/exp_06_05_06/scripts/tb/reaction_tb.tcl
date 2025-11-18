@@ -5,7 +5,7 @@
 set MODULE_UNDER_TEST "reaction"
 
 ######## SET SIM TIME HERE ########
-set SIM_TIME "20ms"
+set SIM_TIME "1500ms"
 
 ######## SET WAVEFORM OUTPUT DIRECTORY ########
 set WAVEFORM_DIR "waveforms"

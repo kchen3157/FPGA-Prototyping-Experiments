@@ -6,6 +6,7 @@ module reaction
         parameter logic [31:0] SEED = 32'hDEADBEEF, // seed for random number generator
         parameter logic [31:0] UPPER_WAIT_MS = 32'd15_000, // max wait time before stimulus
         parameter logic [31:0] LOWER_WAIT_MS = 32'd2_000, // min wait time before stimulus
+        parameter logic [13:0] MAX_REACT_TIME_MS = 14'd1_000, // max time for reaction before automatically going to result
         parameter CLK_PERIOD_NS = 10
     )
     (
@@ -126,13 +127,21 @@ module reaction
             e_wait:
             begin
                 w_tick_en = 1'b1;
-                if (w_tick)
+                if (i_stop)
                 begin
-                    w_wait_time_next = r_wait_time - 1;
+                    w_react_time_next = 14'd9999;
+                    w_state_next = e_result;
                 end
-                if (r_wait_time == 0)
+                else
                 begin
-                    w_state_next = e_react;
+                    if (w_tick)
+                    begin
+                        w_wait_time_next = r_wait_time - 1;
+                    end
+                    if (r_wait_time == 0)
+                    begin
+                        w_state_next = e_react;
+                    end
                 end
             end
             e_react:
@@ -146,6 +155,11 @@ module reaction
                 end
                 if (i_stop)
                 begin
+                    w_state_next = e_result;
+                end
+                if (r_react_time > MAX_REACT_TIME_MS)
+                begin
+                    w_react_time_next = 14'd1000;
                     w_state_next = e_result;
                 end
             end
