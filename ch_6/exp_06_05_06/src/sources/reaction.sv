@@ -96,6 +96,7 @@ module reaction
         w_wait_time_next = r_wait_time;
 
         o_display_greeting = 1'b0;
+        o_display_val = '0;
         o_led = 1'b0;
 
         case (r_state)
@@ -136,6 +137,7 @@ module reaction
             end
             e_react:
             begin
+                o_display_val = r_react_time;
                 o_led = 1'b1;
                 w_tick_en = 1'b1;
                 if (w_tick)
@@ -149,6 +151,7 @@ module reaction
             end
             e_result:
             begin
+                o_display_val = r_react_time;
                 // do nothing, hold state
             end 
             default:
