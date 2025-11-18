@@ -19,12 +19,14 @@ module reaction
         output  logic o_led // stimulus LED
     );
 
+    // *********** State and Register Definitions ***********
     typedef enum {e_idle, e_rand, e_wait, e_react, e_result} t_state;
     t_state r_state, w_state_next;
 
     logic [13:0] r_react_time, w_react_time_next;
     logic [13:0] r_wait_time, w_wait_time_next;
 
+    // *********** Millisecond Tick Generator ***********
     logic w_tick_en, w_tick_clear, w_tick;
     logic [$clog2(1_000_000/CLK_PERIOD_NS)-1:0] r_tick_count, w_tick_count_next;
     always_comb
@@ -36,6 +38,7 @@ module reaction
     end
     assign w_tick = (r_tick_count == 100_000);
 
+    // *********** Random Number Generator Instantiation ***********
     logic w_rand_gen_generate;
     logic [31:0] w_rand_gen_seed, w_rand_gen_upper, w_rand_gen_lower;
     logic w_rand_gen_ready, w_rand_gen_done, w_rand_gen_invalid;
@@ -59,6 +62,7 @@ module reaction
     assign w_rand_gen_upper = UPPER_WAIT_MS;
     assign w_rand_gen_lower = LOWER_WAIT_MS;
 
+    // *********** Register Instantiations ***********
     always_ff @(posedge i_clk, posedge i_rst)
     begin
         if (i_rst)
@@ -83,6 +87,7 @@ module reaction
         end
     end
 
+    // *********** FSMD Logic ***********
     always_comb
     begin
         // defaults

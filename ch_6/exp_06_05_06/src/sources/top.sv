@@ -45,12 +45,34 @@ module top
         .o_idle()                    // For siulation usage
     );
 
+
+    // ********** BUTTON INPUT DEBOUNCING **********
+    logic w_btnl_db, w_btnc_db, w_btnr_db;
+    debouncer u_debouncer_btnl
+    (
+        .i_clk(clk), .i_rst(~cpu_resetn),
+        .i_sw(btnl),
+        .o_sw_debounced(w_btnl_db)
+    );
+    debouncer u_debouncer_btnc
+    (
+        .i_clk(clk), .i_rst(~cpu_resetn),
+        .i_sw(btnc),
+        .o_sw_debounced(w_btnc_db)
+    );
+    debouncer u_debouncer_btnr
+    (
+        .i_clk(clk), .i_rst(~cpu_resetn),
+        .i_sw(btnr),
+        .o_sw_debounced(w_btnr_db)
+    );
+
     
     reaction u_reaction
     (
         .i_clk(clk), .i_rst(~cpu_resetn),
 
-        .i_start(btnl), .i_clear(btnr), .i_stop(btnc), // user control signals
+        .i_start(w_btnl_db), .i_clear(w_btnr_db), .i_stop(w_btnc_db), // user control signals
 
         .o_display_val(w_reaction_val), // output to display, in binary (BCD conversion and led mux handled by other modules)
         .o_display_greeting(w_reaction_greeting), // when high, the display module ignores input val and displays "HI"
