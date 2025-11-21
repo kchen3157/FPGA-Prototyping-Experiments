@@ -21,7 +21,7 @@ Where $g(n)=4n+1$, we calculate $g(n)-f(n-1)$
 
 $$
 g(n) = \begin{cases}
-    5 & \text{if } n = 0 \\
+    5 & \text{if } n = 1 \\
     g(n-1) + 4 & \text{if } n > 0
 \end{cases}
 $$
