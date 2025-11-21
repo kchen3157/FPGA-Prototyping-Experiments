@@ -26,6 +26,9 @@ g(n) = \begin{cases}
 \end{cases}
 $$
 
+In this case, $f(n)=5+g(1)+g(2)+...+g(n)$, and $g(n)=4n+1$. So we calculate each $g(n)$ first and add it to $f(n)$.
+
+
 Likewise, with $h(n)=n^3+2n^2+2n+1$, we calculate $h(n)-h(n-1)$ to get
 
 $$

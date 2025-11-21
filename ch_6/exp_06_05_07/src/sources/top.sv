@@ -4,7 +4,7 @@ module top
         input   logic btnc, // START
         input   logic btnu, // CLEAR
 
-        output   logic [5:0] sw,
+        input   logic [5:0] sw,
 
         // FMC sseg out
         output  logic fmc_clk0_m2c_n, fmc_clk1_m2c_n,
@@ -24,6 +24,7 @@ module top
             .i_start(btnc), .i_clear(btnu),
             .i_n(sw[5:0]),
 
+            .o_done(),
             .o_val(w_bab_2_3_5_val)
         );
 
