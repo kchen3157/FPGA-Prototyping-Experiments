@@ -1,5 +1,12 @@
 ######## SET DESIGN SOURCES HERE (ONE PER FILE) ########
 read_verilog -sv "src/sources/top.sv"
+read_verilog -sv "src/sources/fifo.sv"
+read_verilog -sv "src/sources/edge_det.sv"
+read_verilog -sv "src/sources/sseg4/sseg4.sv"
+read_verilog -sv "src/sources/sseg4/ledmux.sv"
+read_verilog -sv "src/sources/sseg4/hextosseg.sv"
+read_verilog -sv "src/sources/sseg4/bintobcd.sv"
+
 
 ######## SET CONSTRAINTS HERE ########
 read_xdc "src/constrs/Nexys-Video-Master.xdc"

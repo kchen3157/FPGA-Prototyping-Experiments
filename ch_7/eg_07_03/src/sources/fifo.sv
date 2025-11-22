@@ -77,3 +77,67 @@ module fifo_ctrl
     assign o_empty = r_empty;
 
 endmodule
+
+module reg_file
+    #(
+        parameter DATA_WIDTH = 8,
+                  ADDR_WIDTH = 2
+    )
+    (
+        input   logic i_clk,
+        input   logic i_write_en,
+        input   logic [ADDR_WIDTH-1:0] i_write_addr, i_read_addr,
+        input   logic [DATA_WIDTH-1:0] i_write_data,
+        output  logic [DATA_WIDTH-1:0] o_read_data
+    );
+
+    logic [DATA_WIDTH-1:0] r_array [0:2**ADDR_WIDTH-1];
+
+    always_ff @(posedge i_clk)
+    begin
+        if (i_write_en)
+            r_array[i_write_addr] <= i_write_data;
+    end
+
+    assign o_read_data = r_array[i_read_addr];
+endmodule
+
+module fifo
+    #(
+        parameter DATA_WIDTH = 8,
+                  ADDR_WIDTH = 4
+    )
+    (
+        input   logic i_clk, i_rst,
+        input   logic i_read, i_write,
+        input   logic [DATA_WIDTH-1:0] i_write_data,
+
+        output  logic o_full, o_empty,
+        output  logic [DATA_WIDTH-1:0] o_read_data        
+    );
+
+
+    logic [ADDR_WIDTH-1:0] w_write_addr, w_read_addr;
+    logic w_write_en, w_full;
+
+    assign w_write_en = i_write & ~w_full;
+    assign o_full = w_full;
+
+    fifo_ctrl #(.ADDR_WIDTH(ADDR_WIDTH))
+        (
+            .i_clk(i_clk), .i_rst(i_rst),
+            .i_read(i_read), .i_write(i_write),
+            .o_empty(o_empty), .o_full(w_full),
+            .o_read_addr(w_read_addr), .o_write_addr(w_write_addr)
+        );    
+    
+    reg_file #(.DATA_WIDTH(DATA_WIDTH), .ADDR_WIDTH(ADDR_WIDTH))
+        (
+            .i_clk(i_clk),
+            .i_write_en(w_write_en),
+            .i_write_addr(w_write_addr), .i_read_addr(w_read_addr),
+            .i_write_data(i_write_data),
+            .o_read_data(o_read_data)
+        );
+
+endmodule
