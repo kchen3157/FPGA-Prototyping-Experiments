@@ -1,3 +1,5 @@
+# FPGA Prototyping Experiments
+
 This repository is my work while following along Pong P. Chu's book "FPGA Prototyping by SystemVerilog Examples." All exersises, up until the latest chapter I have worked on, have been worked on and verified in some manner, with the vast majority being complete to all of the textbook's specifications.
 
 The board used in this repository is the Digilent Nexys Video.
