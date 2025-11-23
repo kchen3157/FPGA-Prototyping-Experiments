@@ -25,8 +25,6 @@ int main(void)
         fprintf(fptr, " ");
     }
 
-    fprintf(fptr, "\n");
-
     // C -> F (addr 9'h1XX)
     for (uint16_t i = 0; i <= UINT8_MAX; i++)
     {   
