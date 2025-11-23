@@ -5,7 +5,7 @@ module sseg4
     (
         input   logic i_clk, i_rst,
         input   logic [$clog2(9999)-1:0] i_bin,
-        input   logic i_greeting,               // When asserted, display "HI"
+        input   logic i_neg,               // When asserted, replace most significant digit with "-"
 
         output  logic [7:0] o_sseg_n,
         output  logic [3:0] o_ldsel,
@@ -17,7 +17,6 @@ module sseg4
     t_state r_state, w_state_next;
 
     logic [13:0] r_bin, w_bin_next;
-    logic r_greeting, w_greeting_next;
 
     logic [3:0] r_bcd3, r_bcd2, r_bcd1, r_bcd0;
     logic [3:0] w_bcd3_next, w_bcd2_next, w_bcd1_next, w_bcd0_next;
@@ -57,10 +56,10 @@ module sseg4
     );
 
     logic [7:0] w_in_0, w_in_1, w_in_2, w_in_3;
-    assign w_in_0 = (i_greeting) ? 8'b11111001 : w_sseg_0_n; // HI: 'I'
-    assign w_in_1 = (i_greeting) ? 8'b10001001 : w_sseg_1_n; // HI: 'H'
-    assign w_in_2 = (i_greeting) ? 8'b11111111 : w_sseg_2_n;
-    assign w_in_3 = (i_greeting) ? 8'b11111111 : w_sseg_3_n;
+    assign w_in_0 = w_sseg_0_n; 
+    assign w_in_1 = w_sseg_1_n; 
+    assign w_in_2 = w_sseg_2_n;
+    assign w_in_3 = (i_neg) ? 8'b10111111 : w_sseg_3_n;
 
 
     ledmux u_ledmux
@@ -77,7 +76,6 @@ module sseg4
         begin
             r_state <= e_idle;
             r_bin <= '0;
-            r_greeting <= 1'b0;
             r_bcd3 <= '0;
             r_bcd2 <= '0;
             r_bcd1 <= '0;
@@ -87,7 +85,6 @@ module sseg4
         begin
             r_state <= w_state_next;
             r_bin <= w_bin_next;
-            r_greeting <= w_greeting_next;
             r_bcd3 <= w_bcd3_next;
             r_bcd2 <= w_bcd2_next;
             r_bcd1 <= w_bcd1_next;
@@ -100,7 +97,6 @@ module sseg4
         // defaults
         w_state_next = r_state;
         w_bin_next = r_bin;
-        w_greeting_next = r_greeting;
         w_bcd0_next = r_bcd0;
         w_bcd1_next = r_bcd1;
         w_bcd2_next = r_bcd2;
@@ -116,7 +112,6 @@ module sseg4
                 if (w_bintobcd_ready)
                 begin
                     w_bin_next = i_bin;
-                    w_greeting_next = i_greeting;
                     w_bintobcd_start = 1'b1;
                     w_state_next = e_change;
                 end
