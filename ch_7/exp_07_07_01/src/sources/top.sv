@@ -5,13 +5,10 @@ module top
 
         input   logic [7:0] sw,
 
-        output  logic [3:0] led,
-        
         // FMC sseg out
-        output  logic fmc_clk0_m2c_n, fmc_clk1_m2c_n,
-        output  logic fmc_la_2n, fmc_la_2p, fmc_la_3p, fmc_la_4p,
-                      fmc_la_5n, fmc_la_8n, fmc_la_8p, fmc_la_9n,
-                      fmc_la_9p, fmc_la_12p,
+        output  logic [3:0] sseg_dig,
+        output  logic sseg_a, sseg_b, sseg_c, sseg_d, sseg_e,
+                      sseg_f, sseg_g, sseg_dp,
 
         // vadj
         (* DONT_TOUCH = "TRUE" *) output  logic [1:0] set_vadj,
@@ -26,17 +23,15 @@ module top
             .o_sum(w_sum)
         );
 
-    assign led = w_sum;
-
     //********* DISPLAY OUTPUT *********
     // Create nets to connect sseg4 and reaction together
     logic [13:0] w_reaction_val;
     // Create sseg/ldsel nets
     logic [7:0] w_sseg_n;
     logic [3:0] w_ldsel;
-    assign {fmc_la_5n, fmc_la_8p, fmc_la_12p, fmc_clk0_m2c_n,
-            fmc_la_8n, fmc_la_9p, fmc_la_3p, fmc_la_9n} = w_sseg_n;
-    assign  {fmc_la_2p, fmc_la_2n, fmc_la_4p, fmc_clk1_m2c_n} = w_ldsel;
+    assign {sseg_dp, sseg_g, sseg_f, sseg_e,
+            sseg_d, sseg_c, sseg_b, sseg_a} = w_sseg_n;
+    assign  sseg_dig = w_ldsel;
 
     // Set v_adj to 3.3V
     assign vadj_en = 1'b1;
