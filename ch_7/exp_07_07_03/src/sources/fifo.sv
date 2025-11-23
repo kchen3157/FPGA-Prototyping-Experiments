@@ -12,7 +12,10 @@ module fifo_ctrl
 
 
     logic [ADDR_WIDTH-1:0] r_read_ptr, w_read_ptr_next, w_read_ptr_succ;
-    logic [ADDR_WIDTH-1:0] r_write_ptr, w_write_ptr_next, w_write_ptr_succ;
+
+    // Write in little endian order
+    logic [ADDR_WIDTH-1:0] r_write_ptr, w_write_ptr_next;
+    logic [ADDR_WIDTH-1:0] w_write_ptr_succ0, w_write_ptr_succ1;
     logic r_full, w_full_next;
     logic r_empty, w_empty_next;
 
@@ -37,7 +40,8 @@ module fifo_ctrl
 
     always_comb
     begin
-        w_write_ptr_succ = r_write_ptr + 1;
+        w_write_ptr_succ0 = r_write_ptr + 2;
+        w_write_ptr_succ1 = r_write_ptr + 3;
         w_read_ptr_succ = r_read_ptr + 1;
 
         w_write_ptr_next = r_write_ptr;
@@ -57,15 +61,24 @@ module fifo_ctrl
         2'b10: // write
             if (~r_full)
             begin
-                w_write_ptr_next = w_write_ptr_succ;
+                w_write_ptr_next = w_write_ptr_succ0;
                 w_empty_next = 1'b0;
-                if (w_write_ptr_succ == r_read_ptr)
+                if (w_write_ptr_succ0 == r_read_ptr)
+                    w_full_next = 1'b1;
+                if (w_write_ptr_succ1 == r_read_ptr)
                     w_full_next = 1'b1;
             end
         2'b11: // write and read
         begin
-            w_read_ptr_next = w_read_ptr_succ;
-            w_write_ptr_next = w_write_ptr_succ;
+            if (~r_full)
+            begin
+                w_read_ptr_next = w_read_ptr_succ;
+                w_write_ptr_next = w_write_ptr_succ0;
+                if (w_write_ptr_succ0 == r_read_ptr)
+                    w_full_next = 1'b1;
+                if (w_write_ptr_succ1 == r_read_ptr)
+                    w_full_next = 1'b1;
+            end
         end
         default: ; // do nothing
         endcase
@@ -80,23 +93,25 @@ endmodule
 
 module reg_file
     #(
-        parameter DATA_WIDTH = 8,
+        parameter WRITE_DATA_WIDTH = 16,
+                  READ_DATA_WIDTH = 8,
                   ADDR_WIDTH = 2
     )
     (
         input   logic i_clk,
         input   logic i_write_en,
         input   logic [ADDR_WIDTH-1:0] i_write_addr, i_read_addr,
-        input   logic [DATA_WIDTH-1:0] i_write_data,
-        output  logic [DATA_WIDTH-1:0] o_read_data
+        input   logic [WRITE_DATA_WIDTH-1:0] i_write_data,
+        output  logic [READ_DATA_WIDTH-1:0] o_read_data
     );
 
-    logic [DATA_WIDTH-1:0] r_array [0:2**ADDR_WIDTH-1];
+    logic [READ_DATA_WIDTH-1:0] r_array [0:2**ADDR_WIDTH-1];
 
     always_ff @(posedge i_clk)
     begin
         if (i_write_en)
-            r_array[i_write_addr] <= i_write_data;
+            r_array[i_write_addr] <= i_write_data[(WRITE_DATA_WIDTH-READ_DATA_WIDTH)-1:0];
+            r_array[i_write_addr+1] <= i_write_data[WRITE_DATA_WIDTH-1:(WRITE_DATA_WIDTH-READ_DATA_WIDTH)];
     end
 
     assign o_read_data = r_array[i_read_addr];
@@ -104,16 +119,17 @@ endmodule
 
 module fifo
     #(
-        parameter DATA_WIDTH = 8,
-                  ADDR_WIDTH = 4
+        parameter WRITE_DATA_WIDTH = 16,
+                  READ_DATA_WIDTH = 8,
+                  ADDR_WIDTH = 8
     )
     (
         input   logic i_clk, i_rst,
         input   logic i_read, i_write,
-        input   logic [DATA_WIDTH-1:0] i_write_data,
+        input   logic [WRITE_DATA_WIDTH-1:0] i_write_data,
 
         output  logic o_full, o_empty,
-        output  logic [DATA_WIDTH-1:0] o_read_data        
+        output  logic [READ_DATA_WIDTH-1:0] o_read_data        
     );
 
 
@@ -131,7 +147,7 @@ module fifo
             .o_read_addr(w_read_addr), .o_write_addr(w_write_addr)
         );    
     
-    reg_file #(.DATA_WIDTH(DATA_WIDTH), .ADDR_WIDTH(ADDR_WIDTH))
+    reg_file #(.WRITE_DATA_WIDTH(WRITE_DATA_WIDTH), .READ_DATA_WIDTH(READ_DATA_WIDTH), .ADDR_WIDTH(ADDR_WIDTH))
         (
             .i_clk(i_clk),
             .i_write_en(w_write_en),
