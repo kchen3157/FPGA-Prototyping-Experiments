@@ -95,7 +95,9 @@
 */*/bd/*/ip/*/*.xml
 */*/*/bd/*/ip/*/*.xml
 
+*a.out
 *.c
+!romgen.c
 *.h
 *.vho
 *.html
