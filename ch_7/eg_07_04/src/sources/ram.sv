@@ -52,35 +52,77 @@ module sync_dual_port_ram_simple
         input   logic i_write_en,
         input   logic [1-ADDR_WIDTH:0] i_addr_read, i_addr_write,
         input   logic [DATA_WIDTH-1:0] i_data,
-        output  logic [DATA_WIDTH-1:0] o_data_a
+        output  logic [DATA_WIDTH-1:0] o_data
     );
 
     logic [DATA_WIDTH-1:0] ram [0:2**ADDR_WIDTH-1];
-    logic [DATA_WIDTH-1:0] r_data_a, r_data_b;
+    logic [DATA_WIDTH-1:0] r_data;
 
-    // PORT A
+    always_ff @(posedge i_clk)
+    begin
+        // WRITE PORT
+        if (i_write_en)
+            ram[i_addr_write] <= i_data;
+        
+        // READ PORT
+        r_data <= ram[i_addr_read];
+    end
+
+    assign o_data = r_data;
+
+endmodule
+
+module sync_single_port_ram
+    #(
+        parameter DATA_WIDTH = 8,
+                  ADDR_WIDTH = 10
+    )
+    (
+        input   logic i_clk,
+        input   logic i_write_en,
+        input   logic [1-ADDR_WIDTH:0] i_addr,
+        input   logic [DATA_WIDTH-1:0] i_data,
+        output  logic [DATA_WIDTH-1:0] o_data
+    );
+
+    logic [DATA_WIDTH-1:0] ram [0:2**ADDR_WIDTH-1];
+    logic [DATA_WIDTH-1:0] r_data;
+
+    // ONE PORT
     always_ff @(posedge i_clk)
     begin
         // WRITE
-        if (i_write_en_a)
-            ram[i_addr_a] <= i_data_a;
+        if (i_write_en)
+            ram[i_addr] <= i_data;
         
         // READ
-        r_data_a <= ram[i_addr_a];
+        r_data <= ram[i_addr];
     end
 
-    // PORT B
+    assign o_data = r_data;
+
+endmodule
+
+module sync_single_port_ram
+    #(
+        parameter DATA_WIDTH = 8,
+                  ADDR_WIDTH = 4
+    )
+    (
+        input   logic i_clk,
+        input   logic [1-ADDR_WIDTH:0] i_addr,
+        output  logic [DATA_WIDTH-1:0] o_data
+    );
+
+    logic [DATA_WIDTH-1:0] rom [0:2**ADDR_WIDTH-1];
+    logic [DATA_WIDTH-1:0] r_data;
+
     always_ff @(posedge i_clk)
     begin
-        // WRITE
-        if (i_write_en_b)
-            ram[i_addr_b] <= i_data_b;
-
-        // READ
-        r_data_b <= ram[i_addr_b];
+        // READ PORT
+        r_data <= rom[i_addr];
     end
 
-    assign o_data_b = r_data_b;
-    assign o_data_a = r_data_a;
+    assign o_data = r_data;
 
 endmodule
